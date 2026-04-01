@@ -5,7 +5,8 @@
     "rootDir": "./src",
     "paths": {
       "@crm/domain": ["../domain/src/index.ts"],
-      "@crm/shared-utils": ["../shared-utils/src/index.ts"]
+      "@crm/shared-utils": ["../shared-utils/src/index.ts"],
+      "@shared-ui/*": ["./src/lib/*"]
     }
   },
   "include": ["src/**/*.ts"],

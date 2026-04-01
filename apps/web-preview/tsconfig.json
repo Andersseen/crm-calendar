@@ -18,7 +18,8 @@
       "@crm/domain": ["../../packages/domain/src/index.ts"],
       "@crm/application": ["../../packages/application/src/index.ts"],
       "@crm/shared-utils": ["../../packages/shared-utils/src/index.ts"],
-      "@crm/shared-ui": ["../../packages/shared-ui/src/index.ts"]
+      "@crm/shared-ui": ["../../packages/shared-ui/src/index.ts"],
+      "@shared-ui/*": ["../../packages/shared-ui/src/lib/*"]
     }
   },
   "angularCompilerOptions": {

@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { CheckboxModule } from 'primeng/checkbox';
-import { UiEmployee } from '../../../features/calendar/calendar.provider';
+import { UiEmployee } from '@shared-ui/features/calendar/calendar.provider';
 
 @Component({
   selector: 'crm-employee-dialog',

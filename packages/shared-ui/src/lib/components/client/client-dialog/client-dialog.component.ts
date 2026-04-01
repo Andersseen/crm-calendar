@@ -14,7 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { TabsModule } from 'primeng/tabs';
-import { UiClient, UiAppointment } from '../../../features/calendar/calendar.provider';
+import { UiClient, UiAppointment } from '@shared-ui/features/calendar/calendar.provider';
 
 @Component({
   selector: 'crm-client-dialog',

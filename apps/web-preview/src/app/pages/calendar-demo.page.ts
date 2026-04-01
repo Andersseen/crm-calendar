@@ -13,11 +13,7 @@ import { ButtonModule } from 'primeng/button';
   imports: [AppShellComponent, CalendarFeatureComponent, ButtonModule],
   providers: [{ provide: CALENDAR_DATA_PROVIDER, useExisting: MockDataService }],
   template: `
-    <crm-app-shell pageTitle="Calendario (Mock)">
-      <div header-actions class="actions-row">
-        <p-button label="Sincronizar" icon="pi pi-sync" severity="secondary" [text]="true" />
-      </div>
-
+    <crm-app-shell [navItems]="navigationItems" pageTitle="Calendario (Mock)">
       <div class="calendar-layout-wrapper">
         <crm-calendar-feature />
       </div>
@@ -36,4 +32,10 @@ import { ButtonModule } from 'primeng/button';
     }
   `,
 })
-export default class CalendarDemoPage {}
+export default class CalendarDemoPage {
+  navigationItems = [
+    { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendar' },
+    { label: 'Clientes', icon: 'pi pi-users', routerLink: '/clients' },
+    { label: 'Empleados', icon: 'pi pi-id-card', routerLink: '/employees' },
+  ];
+}

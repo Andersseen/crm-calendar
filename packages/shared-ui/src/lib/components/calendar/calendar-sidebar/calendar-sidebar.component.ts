@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
-import { CalendarEventInput } from '../crm-calendar/crm-calendar.component';
+import { CalendarEventInput } from '@shared-ui/components/calendar/crm-calendar/crm-calendar.component';
 
 @Component({
   selector: 'crm-calendar-sidebar',

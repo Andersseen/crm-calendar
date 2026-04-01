@@ -1,7 +1,7 @@
 import { Component, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ThemeService } from '../../../services/theme.service';
+import { ThemeService } from '@shared-ui/services/theme.service';
 
 export interface NavItem {
   label: string;

@@ -6,14 +6,14 @@ import {
   CalendarEventClickEvent,
   CalendarEventMoveEvent,
   CalendarEventInput
-} from '../../../components/calendar/crm-calendar/crm-calendar.component';
+} from '@shared-ui/components/calendar/crm-calendar/crm-calendar.component';
 import {
   CalendarSidebarComponent,
-} from '../../../components/calendar/calendar-sidebar/calendar-sidebar.component';
+} from '@shared-ui/components/calendar/calendar-sidebar/calendar-sidebar.component';
 import {
   AppointmentDialogComponent,
   AppointmentFormData,
-} from '../../../components/calendar/appointment-dialog/appointment-dialog.component';
+} from '@shared-ui/components/calendar/appointment-dialog/appointment-dialog.component';
 import { ButtonModule } from 'primeng/button';
 import { CalendarStateService } from '../calendar-state.service';
 
