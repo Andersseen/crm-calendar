@@ -8,6 +8,7 @@
     "start": "ng serve",
     "dev": "ng serve --configuration development --port 4201",
     "build": "ng build",
+    "deploy": "ng build && wrangler pages deploy dist/web-preview/browser",
     "test": "ng test",
     "lint": "eslint src/",
     "typecheck": "ng build --configuration production --dry-run"

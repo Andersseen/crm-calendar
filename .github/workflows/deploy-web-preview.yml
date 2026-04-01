@@ -10,7 +10,7 @@ jobs:
     name: Build and deploy web-preview
     runs-on: ubuntu-latest
     env:
-      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CF_PAGES_PROJECT: ${{ secrets.CF_PAGES_PROJECT }}
     steps:
       - uses: actions/checkout@v4
@@ -34,18 +34,19 @@ jobs:
           node-version: '18'
 
       - name: Install Wrangler
-        run: npm install -g @cloudflare/wrangler
+        run: npm install -g wrangler@latest
 
       - name: Publish to Cloudflare Pages (Wrangler)
-        if: env.CF_API_TOKEN != '' && env.CF_PAGES_PROJECT != ''
+        if: env.CLOUDFLARE_API_TOKEN != ''  && env.CF_PAGES_PROJECT != ''
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_PAGES_PROJECT: ${{ secrets.CF_PAGES_PROJECT }}
         run: |
-          npx -y @cloudflare/wrangler@3 pages publish ./dist/web-preview --project-name "${{ secrets.CF_PAGES_PROJECT }}" --branch main
+          npx -y wrangler@latest pages deploy ./dist/web-preview --project-name "${{ env.CF_PAGES_PROJECT }}" --branch main
 
       - name: Skip publish when missing secrets
-        if: env.CF_API_TOKEN == '' || env.CF_PAGES_PROJECT == ''
-        run: echo "CF_API_TOKEN or CF_PAGES_PROJECT secret not set; skipping publish."
+        if: env.CLOUDFLARE_API_TOKEN == '' || env.CF_PAGES_PROJECT == ''
+        run: echo "CLOUDFLARE_API_TOKEN or CF_PAGES_PROJECT secret not set; skipping publish."
 
 # Notes:
 # - Add `CF_API_TOKEN` and `CF_PAGES_PROJECT` in repository Secrets.

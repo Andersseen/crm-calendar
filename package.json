@@ -18,13 +18,14 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md,scss,css,html}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,scss,css,html}\"",
-    "deploy:web-preview": "turbo run build --filter=@crm/web-preview && node ./scripts/publish-with-wrangler.js",
+    "deploy:web-preview:local": "cd apps/web-preview && bun run deploy",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
     "turbo": "^2.9.2",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "wrangler": "^4.79.0"
   },
   "engines": {
     "node": ">=18"
