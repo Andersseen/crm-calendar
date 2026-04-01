@@ -49,6 +49,7 @@ export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewIni
   currentView = signal('timeGridWeek');
   dialogVisible = signal(false);
   dialogData = signal<AppointmentFormData | null>(null);
+  isSidebarVisible = signal(true);
 
   constructor() {
     this.state.loadInitialData();
@@ -181,5 +182,9 @@ export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewIni
   onCancelAppointment(id: string) {
     this.state.cancelAppointment(id);
     this.dialogVisible.set(false);
+  }
+
+  toggleSidebar() {
+    this.isSidebarVisible.update((v) => !v);
   }
 }

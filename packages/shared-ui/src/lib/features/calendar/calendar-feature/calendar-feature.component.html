@@ -8,7 +8,7 @@
   />
 </ng-template>
 
-<div class="calendar-layout">
+<div class="calendar-layout" [class.sidebar-hidden]="!isSidebarVisible()">
   <div class="sidebar-col">
     <crm-calendar-sidebar
       [selectedDate]="viewDate()"
@@ -24,6 +24,13 @@
   </div>
 
   <div class="calendar-col">
+    <button 
+      class="sidebar-toggle-btn" 
+      (click)="toggleSidebar()" 
+      [title]="isSidebarVisible() ? 'Colapsar Panel' : 'Expandir Panel'"
+    >
+      <i [class]="isSidebarVisible() ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"></i>
+    </button>
     <crm-calendar
       #cal
       [currentDate]="viewDate()"
