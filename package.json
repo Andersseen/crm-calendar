@@ -18,7 +18,7 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md,scss,css,html}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,scss,css,html}\"",
-    "deploy:web-preview": "turbo run build --filter=@crm/web-preview && npx -y @cloudflare/wrangler@3 pages publish ./dist/web-preview --project-name \"$CF_PAGES_PROJECT\" --branch main",
+    "deploy:web-preview": "turbo run build --filter=@crm/web-preview && node ./scripts/publish-with-wrangler.js",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
