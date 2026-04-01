@@ -30,15 +30,16 @@
       />
     </div>
 
-    <div class="form-row">
-      <div class="form-field">
+      <div class="form-row color-selection">
         <label for="color">Color Distintivo</label>
-        <div class="color-picker-wrapper">
+        <div class="color-picker-container">
           <p-colorpicker
             id="color"
             [(ngModel)]="form.color"
             [inline]="false"
+            appendTo="body"
           />
+          <div class="color-preview" [style.background-color]="form.color"></div>
           <span class="color-hex">{{ form.color }}</span>
         </div>
       </div>
@@ -50,7 +51,6 @@
           [(ngModel)]="form.isActive"
           [binary]="true"
         />
-      </div>
     </div>
   </div>
 

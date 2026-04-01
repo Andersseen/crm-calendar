@@ -1,5 +1,6 @@
-import { Component, computed, signal, inject, OnInit } from '@angular/core';
+import { Component, computed, signal, inject, OnInit, viewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HeaderService } from '../../../services/header.service';
 import {
   CrmCalendarComponent,
   CalendarDateSelectEvent,
@@ -37,8 +38,11 @@ export interface DailyStats {
   templateUrl: './calendar-feature.component.html',
   styleUrls: ['./calendar-feature.component.scss'],
 })
-export class CalendarFeatureComponent implements OnInit {
+export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly state = inject(CalendarStateService);
+  private headerService = inject(HeaderService);
+
+  readonly headerActions = viewChild<TemplateRef<any>>('headerActions');
 
   // Local View State
   viewDate = signal(new Date());
@@ -46,8 +50,24 @@ export class CalendarFeatureComponent implements OnInit {
   dialogVisible = signal(false);
   dialogData = signal<AppointmentFormData | null>(null);
 
-  ngOnInit() {
+  constructor() {
     this.state.loadInitialData();
+  }
+
+  ngOnInit() {
+    // Basic init logic remains
+  }
+
+  ngAfterViewInit() {
+    // Register actions when the view is ready
+    const template = this.headerActions();
+    if (template) {
+      this.headerService.setActions(template);
+    }
+  }
+
+  ngOnDestroy() {
+    this.headerService.clearActions(this.headerActions() || null);
   }
 
   dailyStats = computed<DailyStats>(() => {

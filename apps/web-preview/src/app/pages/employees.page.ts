@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal, effect, viewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -13,6 +13,7 @@ import {
   CalendarStateService,
   UiEmployee,
   CALENDAR_DATA_PROVIDER,
+  HeaderService,
 } from '@crm/shared-ui';
 import { MockDataService } from '../services/mock-data.service';
 
@@ -36,11 +37,7 @@ import { MockDataService } from '../services/mock-data.service';
     { provide: CALENDAR_DATA_PROVIDER, useExisting: MockDataService },
   ],
   template: `
-    <div class="page-header mt-[-10px]">
-      <div class="header-content">
-        <h1 class="page-title">Gestión de Empleados</h1>
-        <p class="page-subtitle">Administra el personal y sus especialidades de servicio.</p>
-      </div>
+    <ng-template #headerActions>
       <p-button
         label="Nuevo Empleado"
         icon="pi pi-plus"
@@ -48,7 +45,7 @@ import { MockDataService } from '../services/mock-data.service';
         severity="primary"
         [raised]="true"
       />
-    </div>
+    </ng-template>
 
     <div class="premium-stats-grid">
       <div class="stat-card glass-card">
@@ -177,27 +174,6 @@ import { MockDataService } from '../services/mock-data.service';
     <p-confirmdialog />
   `,
   styles: `
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 32px;
-    }
-
-    .page-title {
-      font-size: 1.875rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      color: var(--color-text-primary);
-      margin: 0;
-    }
-
-    .page-subtitle {
-      color: var(--color-text-secondary);
-      font-weight: 500;
-      margin: 4px 0 0 0;
-    }
-
     .premium-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -338,9 +314,12 @@ import { MockDataService } from '../services/mock-data.service';
     }
   `,
 })
-export default class EmployeesPage {
-  state = inject(CalendarStateService);
-  confirmationService = inject(ConfirmationService);
+export default class EmployeesPage implements OnDestroy, AfterViewInit {
+  protected readonly state = inject(CalendarStateService);
+  private confirmationService: ConfirmationService = inject(ConfirmationService);
+  private headerService: HeaderService = inject(HeaderService);
+
+  readonly headerActions = viewChild<TemplateRef<any>>('headerActions');
 
   dialogVisible = false;
   selectedEmployee: UiEmployee | null = null;
@@ -349,6 +328,18 @@ export default class EmployeesPage {
 
   constructor() {
     this.state.loadInitialData();
+  }
+
+  ngAfterViewInit() {
+    // Register dynamic header actions
+    const template = this.headerActions();
+    if (template) {
+      this.headerService.setActions(template);
+    }
+  }
+
+  ngOnDestroy() {
+    this.headerService.clearActions(this.headerActions() || null);
   }
 
   openNew() {

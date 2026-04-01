@@ -44,8 +44,21 @@
       <div class="header-content">
         <div class="header-left">
           <h1 class="page-title">{{ title() }}</h1>
+          @if (subtitle()) {
+            <p class="page-subtitle">{{ subtitle() }}</p>
+          }
         </div>
         <div class="header-right">
+          <div class="header-actions">
+            <!-- Legacy slot for static content -->
+            <ng-content select="[header-actions]"></ng-content>
+            
+            <!-- Dynamic actions from HeaderService -->
+            @if (headerService.currentActions(); as template) {
+              <ng-container [ngTemplateOutlet]="template" />
+            }
+          </div>
+          <div class="header-divider"></div>
           <!-- Theme Toggle -->
           <button 
             type="button" 

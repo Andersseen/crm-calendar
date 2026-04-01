@@ -91,10 +91,27 @@ body {
   --p-datepicker-week-number-color: var(--color-text-muted);
   --p-datepicker-day-name-color: var(--color-text-muted);
 
+  .p-datepicker-title,
+  .p-datepicker-month,
+  .p-datepicker-year,
+  .p-datepicker-header .p-button {
+    color: var(--color-text-primary) !important;
+  }
+
   /* Panel for non-inline modes */
   --p-datepicker-panel-background: var(--color-surface);
   --p-datepicker-panel-border-color: var(--color-border);
   --p-datepicker-panel-color: var(--color-text-primary);
+
+  /* Input & IconField Overrides */
+  --p-inputtext-background: var(--color-surface);
+  --p-inputtext-color: var(--color-text-primary);
+  --p-inputtext-border-color: var(--color-border);
+  --p-inputtext-placeholder-color: var(--color-text-muted);
+  --p-inputtext-hover-border-color: var(--color-primary);
+  --p-inputtext-focus-border-color: var(--color-primary);
+  
+  --p-iconfield-icon-color: var(--color-text-muted);
 }
 
 /* Scrollbar */

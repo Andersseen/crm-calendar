@@ -23,27 +23,56 @@
   display: flex;
   gap: 24px;
   align-items: center;
-}
-
-.color-picker-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 4px;
+  
+  &.color-selection {
+    margin-top: 8px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .color-hex {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.color-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-bg-secondary);
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  width: fit-content;
+}
+
+.color-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
 .checkbox-field {
-  flex-direction: row !important;
+  display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 20px;
+  padding: 8px 12px;
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  width: fit-content;
+  
+  label {
+    margin: 0;
+    cursor: pointer;
+  }
 }
 
 .dialog-footer {

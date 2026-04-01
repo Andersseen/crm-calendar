@@ -1,3 +1,13 @@
+<ng-template #headerActions>
+  <p-button 
+    label="Nueva Cita" 
+    icon="pi pi-plus" 
+    (onClick)="openNewAppointment()"
+    severity="primary"
+    [raised]="true"
+  />
+</ng-template>
+
 <div class="calendar-layout">
   <div class="sidebar-col">
     <crm-calendar-sidebar

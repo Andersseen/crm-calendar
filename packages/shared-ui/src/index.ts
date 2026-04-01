@@ -14,3 +14,6 @@ export * from './lib/features/calendar/calendar-state.service';
 
 // Layout Components
 export * from './lib/components/layout/app-shell/app-shell.component';
+
+// Services
+export * from './lib/services/header.service';

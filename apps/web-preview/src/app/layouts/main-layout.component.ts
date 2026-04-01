@@ -10,7 +10,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [CommonModule, RouterOutlet, AppShellComponent],
   template: `
-    <crm-app-shell [navItems]="navigationItems" [title]="pageTitle()">
+    <crm-app-shell 
+      [navItems]="navigationItems" 
+      [title]="pageTitle()"
+      [subtitle]="pageSubtitle()"
+    >
       <router-outlet />
     </crm-app-shell>
   `,
@@ -46,5 +50,13 @@ export class MainLayoutComponent {
     if (url.includes('/employees')) return 'Gestión de Empleados';
     if (url.includes('/clients')) return 'Directorio de Clientes';
     return 'CRM Dashboard';
+  });
+
+  pageSubtitle = computed(() => {
+    const url = this.currentUrl() || '';
+    if (url.includes('/calendar')) return 'Visualiza y gestiona las citas de tu centro.';
+    if (url.includes('/employees')) return 'Administra el personal y sus especialidades de servicio.';
+    if (url.includes('/clients')) return 'Gestiona la base de datos de tus clientes y su historial.';
+    return null;
   });
 }
