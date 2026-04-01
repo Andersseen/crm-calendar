@@ -48,8 +48,15 @@
       color: var(--color-text-primary);
     }
 
+    /* Standard container for DatePicker inline */
+    .p-datepicker-calendar-container,
+    .p-datepicker-panel {
+      background: transparent !important;
+      border: none !important;
+    }
+
     .p-datepicker-title, .p-datepicker-prev, .p-datepicker-next {
-      color: var(--color-text-primary);
+      color: var(--color-text-primary) !important;
     }
 
     .p-datepicker-calendar th {

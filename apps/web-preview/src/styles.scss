@@ -70,6 +70,31 @@ body {
   --p-surface-700: var(--color-text-secondary);
   --p-surface-800: var(--color-text-primary);
   --p-surface-900: var(--color-bg-primary);
+
+  /* DatePicker/Calendar Overrides */
+  --p-datepicker-background: var(--color-surface);
+  --p-datepicker-color: var(--color-text-primary);
+  --p-datepicker-border-color: var(--color-border);
+  --p-datepicker-header-background: transparent;
+  --p-datepicker-header-color: var(--color-text-primary);
+  --p-datepicker-title-color: var(--color-text-primary);
+  --p-datepicker-button-color: var(--color-text-secondary);
+  --p-datepicker-button-hover-background: var(--color-surface-soft);
+  --p-datepicker-day-color: var(--color-text-secondary);
+  --p-datepicker-day-hover-background: var(--color-surface-soft);
+  --p-datepicker-day-selected-background: var(--color-primary);
+  --p-datepicker-day-selected-color: #ffffff;
+  
+  /* Selectors for text that might be hard-coded in PrimeNG 18 themes */
+  --p-datepicker-header-title-color: var(--color-text-primary);
+  --p-datepicker-header-button-color: var(--color-text-secondary);
+  --p-datepicker-week-number-color: var(--color-text-muted);
+  --p-datepicker-day-name-color: var(--color-text-muted);
+
+  /* Panel for non-inline modes */
+  --p-datepicker-panel-background: var(--color-surface);
+  --p-datepicker-panel-border-color: var(--color-border);
+  --p-datepicker-panel-color: var(--color-text-primary);
 }
 
 /* Scrollbar */
