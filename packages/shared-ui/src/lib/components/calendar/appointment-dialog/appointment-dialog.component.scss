@@ -1,0 +1,99 @@
+.appointment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.form-status {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.duration-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--color-surface-soft);
+  border-radius: 8px;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  border: 1px solid var(--color-border);
+
+  i { font-size: 1rem; }
+}
+
+.service-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.service-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.time-summary {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+
+  i { color: var(--color-primary); }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-right {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* PrimeNG Override within component */
+::ng-deep {
+  .p-dialog .p-dialog-content {
+     background: var(--color-surface) !important;
+     color: var(--color-text-primary) !important;
+  }
+  .p-dialog .p-dialog-header {
+     background: var(--color-surface) !important;
+     color: var(--color-text-primary) !important;
+     border-bottom: 1px solid var(--color-border-soft);
+  }
+}

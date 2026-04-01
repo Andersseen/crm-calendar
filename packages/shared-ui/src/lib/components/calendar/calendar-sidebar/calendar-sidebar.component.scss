@@ -1,0 +1,252 @@
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  height: 100%;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Premium Button Override */
+::ng-deep .premium-action-btn {
+  span {
+    font-weight: 800 !important;
+    font-size: 1rem !important;
+    letter-spacing: -0.01em !important;
+  }
+}
+
+/* Mini Calendar */
+.mini-calendar {
+  overflow-x: hidden;
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  
+  ::ng-deep .p-datepicker {
+    border: none;
+    padding: 0;
+    background: transparent;
+    width: 100% !important;
+
+    table {
+      width: 100% !important;
+      table-layout: fixed;
+    }
+
+    .p-datepicker-header {
+      background: transparent;
+      border-bottom: 1px solid var(--color-border-soft);
+      padding-bottom: 12px;
+      margin-bottom: 8px;
+      color: var(--color-text-primary);
+    }
+
+    .p-datepicker-title, .p-datepicker-prev, .p-datepicker-next {
+      color: var(--color-text-primary);
+    }
+
+    .p-datepicker-calendar th {
+      color: var(--color-text-muted);
+      font-size: 0.75rem;
+    }
+
+    .p-datepicker-calendar td > span {
+      border-radius: 10px;
+      width: 30px;
+      height: 30px;
+      transition: all 0.2s;
+      color: var(--color-text-secondary);
+      
+      &.p-datepicker-today {
+        background: var(--color-surface-soft);
+        color: var(--color-primary);
+      }
+      
+      &.p-highlight {
+        background: var(--color-primary);
+        color: white;
+        box-shadow: 0 4px 10px var(--color-primary-soft);
+      }
+
+      &:hover:not(.p-highlight):not(.p-disabled) {
+        background: var(--color-surface-soft);
+        color: var(--color-text-primary);
+      }
+    }
+  }
+}
+
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .header-line {
+    height: 1px;
+    background: var(--color-border-soft);
+    flex: 1;
+  }
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  .stat-accent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: var(--color-text-muted);
+    opacity: 0.8;
+  }
+
+  .stat-content {
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+  }
+
+  /* Specific Variants */
+  &.total .stat-accent { background: var(--color-text-muted); }
+  &.confirmed {
+    background: color-mix(in srgb, var(--color-success) 8%, var(--color-surface));
+    border-color: color-mix(in srgb, var(--color-success) 20%, var(--color-border));
+    .stat-accent { background: var(--color-success); }
+  }
+  &.pending {
+    background: color-mix(in srgb, var(--color-warning) 8%, var(--color-surface));
+    border-color: color-mix(in srgb, var(--color-warning) 20%, var(--color-border));
+    .stat-accent { background: var(--color-warning); }
+  }
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Appointments List */
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.appointment-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--color-surface-soft);
+    border-color: var(--color-primary);
+  }
+
+  .apt-time {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    min-width: 45px;
+  }
+
+  .apt-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    .apt-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .apt-subtitle {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+    }
+  }
+
+  .apt-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: var(--color-surface-soft);
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+  color: var(--color-text-muted);
+  gap: 12px;
+
+  i { font-size: 2rem; }
+  span { font-size: 0.85rem; font-weight: 600; font-style: italic; }
+}

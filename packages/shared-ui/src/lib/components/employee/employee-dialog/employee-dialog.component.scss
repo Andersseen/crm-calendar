@@ -1,0 +1,66 @@
+.employee-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 10px 0;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.color-picker-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px;
+}
+
+.color-hex {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.checkbox-field {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Global PrimeNG overrides for this dialog */
+::ng-deep {
+  .p-dialog-content {
+    background: var(--color-surface) !important;
+    color: var(--color-text-primary) !important;
+  }
+  .p-dialog-header {
+    background: var(--color-surface) !important;
+    color: var(--color-text-primary) !important;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+}

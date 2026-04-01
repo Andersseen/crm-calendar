@@ -1,0 +1,73 @@
+<p-dialog
+  [header]="dialogTitle()"
+  [visible]="visible()"
+  (visibleChange)="onVisibleChange($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '400px' }"
+>
+  <div class="employee-form">
+    <div class="form-field">
+      <label for="name">Nombre Completo *</label>
+      <input
+        pInputText
+        id="name"
+        [(ngModel)]="form.name"
+        placeholder="Ej. Elena Estilista"
+        (ngModelChange)="validateForm()"
+      />
+    </div>
+
+    <div class="form-field">
+      <label for="position">Cargo / Especialidad *</label>
+      <input
+        pInputText
+        id="position"
+        [(ngModel)]="form.position"
+        placeholder="Ej. Senior Stylist"
+        (ngModelChange)="validateForm()"
+      />
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="color">Color Distintivo</label>
+        <div class="color-picker-wrapper">
+          <p-colorpicker
+            id="color"
+            [(ngModel)]="form.color"
+            [inline]="false"
+          />
+          <span class="color-hex">{{ form.color }}</span>
+        </div>
+      </div>
+
+      <div class="form-field checkbox-field">
+        <label for="isActive">Activo</label>
+        <p-checkbox
+          id="isActive"
+          [(ngModel)]="form.isActive"
+          [binary]="true"
+        />
+      </div>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="dialog-footer">
+      <p-button
+        label="Cancelar"
+        severity="secondary"
+        [text]="true"
+        (onClick)="onClose()"
+      />
+      <p-button
+        [label]="isEditing() ? 'Guardar Cambios' : 'Registrar Empleado'"
+        icon="pi pi-check"
+        (onClick)="onSave()"
+        [disabled]="!isFormValid()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

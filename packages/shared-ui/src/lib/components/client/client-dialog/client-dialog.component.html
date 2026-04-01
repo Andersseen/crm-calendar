@@ -1,0 +1,112 @@
+<p-dialog
+  [header]="dialogTitle()"
+  [visible]="visible()"
+  (visibleChange)="onVisibleChange($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '560px' }"
+>
+  <div class="client-dialog-content">
+    <p-tabs [value]="0">
+      <p-tablist>
+        <p-tab [value]="0">Información General</p-tab>
+        <p-tab [value]="1" *ngIf="isEditing()">Historial de Citas</p-tab>
+      </p-tablist>
+      
+      <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <div class="client-form">
+            <div class="form-field">
+              <label for="name">Nombre Completo *</label>
+              <input
+                pInputText
+                id="name"
+                [(ngModel)]="form.name"
+                placeholder="Ej. María García"
+                (ngModelChange)="validateForm()"
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="phone">Teléfono</label>
+                <input
+                  pInputText
+                  id="phone"
+                  [(ngModel)]="form.phone"
+                  placeholder="600 000 000"
+                />
+              </div>
+              <div class="form-field">
+                <label for="email">Email</label>
+                <input
+                  pInputText
+                  id="email"
+                  [(ngModel)]="form.email"
+                  placeholder="ejemplo@correo.com"
+                />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="notes">Notas Internas</label>
+              <textarea
+                pTextarea
+                id="notes"
+                [(ngModel)]="form.notes"
+                [rows]="5"
+                placeholder="Preferencias, alergias, o información relevante..."
+              ></textarea>
+            </div>
+
+            <div *ngIf="form.createdAt" class="client-meta">
+              Cliente desde: {{ form.createdAt | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+        </p-tabpanel>
+
+        <p-tabpanel [value]="1" *ngIf="isEditing()">
+          <div class="history-list">
+            @if (clientAppointments().length === 0) {
+              <div class="empty-history">
+                <i class="pi pi-calendar-times"></i>
+                <p>No hay citas previas registradas.</p>
+              </div>
+            } @else {
+              @for (appt of clientAppointments(); track appt.id) {
+                <div class="history-item">
+                  <div class="history-date">
+                    {{ appt.startTime | date: 'dd MMM yyyy' }}
+                    <span class="history-time">{{ appt.startTime | date: 'HH:mm' }}</span>
+                  </div>
+                  <div class="history-info">
+                    <span class="history-status" [class]="appt.status">{{ getStatusLabel(appt.status) }}</span>
+                    <div class="history-svc">Cita de servicio</div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+
+  <ng-template #footer>
+    <div class="dialog-footer">
+      <p-button
+        label="Cerrar"
+        severity="secondary"
+        [text]="true"
+        (onClick)="onClose()"
+      />
+      <p-button
+        [label]="isEditing() ? 'Guardar Cambios' : 'Registrar Cliente'"
+        icon="pi pi-check"
+        (onClick)="onSave()"
+        [disabled]="!isFormValid()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

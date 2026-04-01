@@ -6,7 +6,7 @@ import {
   UiEmployee,
   UiService,
 } from './calendar.provider';
-import type { CalendarEventInput } from '../../components/calendar/crm-calendar.component';
+import type { CalendarEventInput } from '../../components/calendar/crm-calendar/crm-calendar.component';
 
 @Injectable()
 export class CalendarStateService {

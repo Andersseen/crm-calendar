@@ -1,0 +1,40 @@
+<div class="calendar-layout">
+  <div class="sidebar-col">
+    <crm-calendar-sidebar
+      [selectedDate]="viewDate()"
+      [totalAppointments]="dailyStats().total"
+      [confirmedCount]="dailyStats().confirmed"
+      [pendingCount]="dailyStats().pending"
+      [upcomingAppointments]="upcomingList()"
+      (newAppointment)="openNewAppointment()"
+      (dateChange)="onSidebarDateChange($event)"
+      (appointmentClick)="onSidebarAppointmentClick($event)"
+      (statusFilterChange)="onFilterChange($event)"
+    />
+  </div>
+
+  <div class="calendar-col">
+    <crm-calendar
+      #cal
+      [events]="state.calendarEvents()"
+      initialView="timeGridWeek"
+      (dateSelect)="onSlotSelected($event)"
+      (eventClick)="onAppointmentClick($event)"
+      (eventDrop)="onAppointmentMoved($event)"
+      (eventResize)="onAppointmentMoved($event)"
+      (viewChange)="onViewChanged($event)"
+    />
+  </div>
+</div>
+
+<crm-appointment-dialog
+  [visible]="dialogVisible()"
+  (visibleChange)="onVisibleChange($event)"
+  [clients]="state.clients()"
+  [employees]="state.employees()"
+  [services]="state.services()"
+  [appointment]="dialogData()"
+  (save)="onSaveAppointment($event)"
+  (cancelAppointment)="onCancelAppointment($event)"
+  (close)="onDialogClose()"
+/>

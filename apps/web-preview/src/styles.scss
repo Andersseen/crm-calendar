@@ -1,56 +1,32 @@
-@use "primeicons/primeicons.css";
-
-/* Premium Design Tokens */
-:root {
-  /* Emerald & Slate Palette */
-  --slate-50: #f8fafc;
-  --slate-100: #f1f5f9;
-  --slate-200: #e2e8f0;
-  --slate-300: #cbd5e1;
-  --slate-400: #94a3b8;
-  --slate-500: #64748b;
-  --slate-600: #475569;
-  --slate-700: #334155;
-  --slate-800: #1e293b;
-  --slate-900: #0f172a;
-  --slate-950: #020617;
-
-  --emerald-50: #ecfdf5;
-  --emerald-100: #d1fae5;
-  --emerald-500: #10b981;
-  --emerald-600: #059669;
-  --emerald-700: #047857;
-
-  --premium-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.08);
-  --premium-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
-  --premium-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.12);
-  --premium-shadow-hover: 0 12px 25px -10px rgba(16, 185, 129, 0.2);
-  
-  --premium-radius: 16px;
-  --premium-glass: rgba(255, 255, 255, 0.75);
-  --premium-border: 1px solid rgba(255, 255, 255, 0.5);
-}
+@use 'primeicons/primeicons.css';
+@import '../../../packages/shared-ui/src/lib/theme/theme.scss';
 
 /* Global Styles */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
   overflow: hidden; /* Lock global scroll */
   font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-  color: var(--slate-800);
-  background: var(--slate-50);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 40%),
-    radial-gradient(at 100% 0%, rgba(51, 65, 85, 0.06) 0px, transparent 40%),
-    radial-gradient(at 50% 50%, rgba(255, 255, 255, 1) 0px, transparent 100%);
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  background-image:
+    radial-gradient(at 0% 0%, var(--color-primary-soft) 0px, transparent 40%),
+    radial-gradient(at 100% 0%, rgba(51, 65, 85, 0.04) 0px, transparent 40%),
+    radial-gradient(at 50% 50%, var(--color-bg-secondary) 0px, transparent 100%);
   -webkit-font-smoothing: antialiased;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Premium Utilities */
@@ -62,40 +38,38 @@ html, body {
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
+
 .glass-card {
-  background: var(--premium-glass);
+  background: var(--color-glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: var(--premium-border);
-  border-radius: var(--premium-radius);
-  box-shadow: var(--premium-shadow);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-premium);
 }
 
 .premium-shadow {
-  box-shadow: var(--premium-shadow-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 .text-muted {
-  color: var(--slate-500);
+  color: var(--color-text-muted);
 }
 
-/* PrimeNG Overrides for Emerald & Slate */
-:root {
-  --p-primary-color: var(--emerald-600);
-  --p-primary-hover-color: var(--emerald-700);
+/* PrimeNG Overrides - Integrated with Semantic Theme */
+:root,
+[data-theme='dark'] {
+  --p-primary-color: var(--color-primary);
   --p-primary-contrast-color: #ffffff;
-  
-  --p-surface-0: #ffffff;
-  --p-surface-50: var(--slate-50);
-  --p-surface-100: var(--slate-100);
-  --p-surface-200: var(--slate-200);
-  --p-surface-300: var(--slate-300);
-  --p-surface-400: var(--slate-400);
-  --p-surface-500: var(--slate-500);
-  --p-surface-600: var(--slate-600);
-  --p-surface-700: var(--slate-700);
-  --p-surface-800: var(--slate-800);
-  --p-surface-900: var(--slate-900);
+
+  --p-surface-0: var(--color-surface);
+  --p-surface-50: var(--color-bg-primary);
+  --p-surface-100: var(--color-surface-soft);
+  --p-surface-200: var(--color-border);
+  --p-surface-500: var(--color-text-muted);
+  --p-surface-700: var(--color-text-secondary);
+  --p-surface-800: var(--color-text-primary);
+  --p-surface-900: var(--color-bg-primary);
 }
 
 /* Scrollbar */
@@ -105,15 +79,15 @@ html, body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--slate-50);
+  background: var(--color-bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--slate-300);
+  background: var(--color-border);
   border-radius: 4px;
-  border: 2px solid var(--slate-50);
+  border: 2px solid var(--color-bg-primary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--slate-400);
+  background: var(--color-text-muted);
 }

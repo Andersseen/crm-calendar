@@ -1,0 +1,71 @@
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <i class="pi pi-sparkles"></i>
+      </div>
+      <span class="brand-name">CRM Estética</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of navItems(); track item.label) {
+        <a 
+          class="nav-item" 
+          [routerLink]="item.routerLink"
+          routerLinkActive="active"
+        >
+          <i [class]="'nav-icon ' + item.icon"></i>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-nav secondary">
+      <a class="nav-item settings" routerLink="/settings" routerLinkActive="active">
+        <i class="nav-icon pi pi-cog"></i>
+        <span class="nav-label">Ajustes</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span class="status-text">Modo Mock Local</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-container">
+    <header class="top-header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1 class="page-title">{{ title() }}</h1>
+        </div>
+        <div class="header-right">
+          <!-- Theme Toggle -->
+          <button 
+            type="button" 
+            class="header-action-btn theme-toggle" 
+            (click)="themeService.toggleTheme()"
+            [title]="themeService.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
+          >
+            <i [class]="themeService.theme() === 'light' ? 'pi pi-moon' : 'pi pi-sun'"></i>
+          </button>
+
+          <button type="button" class="header-action-btn" (click)="onSync.emit()" title="Sincronizar">
+            <i class="pi pi-sync"></i>
+            <span>Sincronizar</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <ng-content></ng-content>
+    </main>
+  </div>
+</div>

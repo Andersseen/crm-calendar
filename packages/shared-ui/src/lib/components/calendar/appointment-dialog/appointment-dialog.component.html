@@ -1,0 +1,140 @@
+<p-dialog
+  [header]="dialogTitle()"
+  [visible]="visible()"
+  (visibleChange)="onVisibleChange($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '480px' }"
+  [contentStyle]="{ padding: '24px' }"
+>
+  <div class="appointment-form">
+    @if (isEditing() && form.status) {
+      <div class="form-status">
+        <p-tag
+          [value]="getStatusLabel(form.status)"
+          [severity]="getStatusSeverity(form.status)"
+        />
+      </div>
+    }
+
+    <div class="form-field">
+      <label for="client">Cliente *</label>
+      <p-select
+        id="client"
+        [options]="clients()"
+        [(ngModel)]="form.clientId"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Seleccionar cliente..."
+        [filter]="true"
+        filterPlaceholder="Buscar..."
+        [style]="{ width: '100%' }"
+      />
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="service">Servicio *</label>
+        <p-select
+          id="service"
+          [options]="services()"
+          [(ngModel)]="form.serviceId"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Seleccionar servicio..."
+          [style]="{ width: '100%' }"
+          (onChange)="onServiceChange()"
+        >
+          <ng-template #item let-svc>
+            <div class="service-option">
+              <span>{{ svc.name }}</span>
+              <span class="service-meta">{{ svc.durationMinutes }}min · {{ svc.priceFormatted }}</span>
+            </div>
+          </ng-template>
+        </p-select>
+      </div>
+
+      <div class="form-field">
+        <label for="employee">Atendido por</label>
+        <p-select
+          id="employee"
+          [options]="employees()"
+          [(ngModel)]="form.employeeId"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Asignar empleado..."
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+        />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="startTime">Fecha y Hora *</label>
+        <p-datepicker
+          id="startTime"
+          [(ngModel)]="form.startTime"
+          [showTime]="true"
+          [stepMinute]="30"
+          dateFormat="dd/mm/yy"
+          [style]="{ width: '100%' }"
+          (onSelect)="onStartTimeChange()"
+        />
+      </div>
+      <div class="form-field">
+        <label>Duración</label>
+        <div class="duration-display">
+          <i class="pi pi-clock"></i>
+          <span>{{ selectedDuration() }} min</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="notes">Notas</label>
+      <textarea
+        pTextarea
+        id="notes"
+        [(ngModel)]="form.notes"
+        [rows]="3"
+        placeholder="Notas adicionales..."
+        [style]="{ width: '100%' }"
+      ></textarea>
+    </div>
+
+    <div class="form-field time-summary">
+      <i class="pi pi-calendar"></i>
+      <span>{{ timeSummary() }}</span>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="dialog-footer">
+      @if (isEditing()) {
+        <p-button
+          label="Cancelar Cita"
+          severity="danger"
+          [text]="true"
+          icon="pi pi-times"
+          (onClick)="onCancelAppointment()"
+        />
+      }
+      <div class="footer-right">
+        <p-button
+          label="Cerrar"
+          severity="secondary"
+          [text]="true"
+          (onClick)="onClose()"
+        />
+        <p-button
+          [label]="isEditing() ? 'Guardar Cambios' : 'Crear Cita'"
+          icon="pi pi-check"
+          (onClick)="onSave()"
+          [disabled]="!isFormValid()"
+        />
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

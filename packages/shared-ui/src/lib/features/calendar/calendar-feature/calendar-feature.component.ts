@@ -5,21 +5,27 @@ import {
   CalendarDateSelectEvent,
   CalendarEventClickEvent,
   CalendarEventMoveEvent,
-} from '../../components/calendar/crm-calendar.component';
+  CalendarEventInput
+} from '../../../components/calendar/crm-calendar/crm-calendar.component';
 import {
   CalendarSidebarComponent,
-  DailyStats,
-  UpcomingAppointment,
-} from '../../components/calendar/calendar-sidebar.component';
+} from '../../../components/calendar/calendar-sidebar/calendar-sidebar.component';
 import {
   AppointmentDialogComponent,
   AppointmentFormData,
-} from '../../components/calendar/appointment-dialog.component';
+} from '../../../components/calendar/appointment-dialog/appointment-dialog.component';
 import { ButtonModule } from 'primeng/button';
-import { CalendarStateService } from './calendar-state.service';
+import { CalendarStateService } from '../calendar-state.service';
+
+export interface DailyStats {
+  total: number;
+  confirmed: number;
+  pending: number;
+}
 
 @Component({
   selector: 'crm-calendar-feature',
+  standalone: true,
   imports: [
     CommonModule,
     CrmCalendarComponent,
@@ -28,78 +34,8 @@ import { CalendarStateService } from './calendar-state.service';
     ButtonModule,
   ],
   providers: [CalendarStateService],
-  template: `
-    <div class="calendar-layout">
-      <div class="sidebar-col">
-        <crm-calendar-sidebar
-          [selectedDate]="viewDate()"
-          [stats]="dailyStats()"
-          [upcoming]="upcomingList()"
-          (newAppointment)="openNewAppointment()"
-          (dateChange)="onSidebarDateChange($event)"
-          (appointmentClick)="onSidebarAppointmentClick($event)"
-        />
-      </div>
-
-      <div class="calendar-col">
-        <crm-calendar
-          #cal
-          [events]="state.calendarEvents()"
-          initialView="timeGridWeek"
-          (dateSelect)="onSlotSelected($event)"
-          (eventClick)="onAppointmentClick($event)"
-          (eventDrop)="onAppointmentMoved($event)"
-          (eventResize)="onAppointmentMoved($event)"
-          (viewChange)="onViewChanged($event)"
-        />
-      </div>
-    </div>
-
-    <crm-appointment-dialog
-      [(visible)]="dialogVisible"
-      [clients]="state.clients()"
-      [employees]="state.employees()"
-      [services]="state.services()"
-      [appointment]="dialogData()"
-      (save)="onSaveAppointment($event)"
-      (cancelAppointment)="onCancelAppointment($event)"
-    />
-  `,
-  styles: `
-    .calendar-layout {
-      display: flex;
-      gap: 32px;
-      height: 100%;
-      padding-bottom: 24px;
-      overflow: hidden; /* Ensure no internal scroll for the layout itself */
-    }
-
-    .sidebar-col {
-      width: 320px;
-      min-width: 320px;
-      flex-shrink: 0;
-      height: 100%;
-      overflow-y: auto;
-      
-      /* Hide scrollbar for cleaner look */
-      &::-webkit-scrollbar { display: none; }
-      scrollbar-width: none;
-    }
-
-    .calendar-col {
-      flex: 1;
-      min-width: 0;
-      background: white;
-      border-radius: 24px;
-      padding: 32px;
-      border: 1px solid var(--slate-200);
-      box-shadow: var(--premium-shadow);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-    }
-  `,
+  templateUrl: './calendar-feature.component.html',
+  styleUrls: ['./calendar-feature.component.scss'],
 })
 export class CalendarFeatureComponent implements OnInit {
   protected readonly state = inject(CalendarStateService);
@@ -125,7 +61,7 @@ export class CalendarFeatureComponent implements OnInit {
     };
   });
 
-  upcomingList = computed<UpcomingAppointment[]>(() => {
+  upcomingList = computed<CalendarEventInput[]>(() => {
     const todayStr = this.viewDate().toDateString();
     const now = new Date();
 
@@ -134,13 +70,21 @@ export class CalendarFeatureComponent implements OnInit {
       .filter((a) => a.startTime.toDateString() === todayStr && a.startTime >= now)
       .sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
       .slice(0, 4)
-      .map((a) => ({
-        id: a.id,
-        time: a.startTime.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-        clientName: this.state.clients().find((c) => c.id === a.clientId)?.name ?? 'Sin Asignar',
-        serviceName:
-          this.state.services().find((s) => s.id === a.serviceId)?.name ?? 'Servicio Especial',
-      }));
+      .map((a) => {
+        const employee = this.state.employees().find((e) => e.id === a.employeeId);
+        const clientName = this.state.clients().find((c) => c.id === a.clientId)?.name ?? 'Sin Asignar';
+        
+        return {
+          id: a.id,
+          title: clientName,
+          start: a.startTime,
+          end: a.endTime,
+          backgroundColor: employee?.color || '#10b981',
+          extendedProps: {
+            employeeName: employee?.name ?? 'Sin asignar'
+          }
+        };
+      });
   });
 
   // === Actions === //
@@ -194,7 +138,19 @@ export class CalendarFeatureComponent implements OnInit {
 
   onSidebarDateChange(date: Date) {
     this.viewDate.set(date);
-    // Future Note: Call FullCalendar API to change date here
+  }
+
+  onVisibleChange(visible: boolean) {
+    this.dialogVisible.set(visible);
+  }
+
+  onDialogClose() {
+    this.dialogVisible.set(false);
+  }
+
+  onFilterChange(status: 'total' | 'confirmed' | 'pending') {
+    // Implement filter logic if needed
+    console.log('Filter by:', status);
   }
 
   onSaveAppointment(data: AppointmentFormData) {

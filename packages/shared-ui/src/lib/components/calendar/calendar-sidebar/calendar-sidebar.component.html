@@ -1,0 +1,87 @@
+<div class="sidebar-container">
+  <!-- Primary Action -->
+  <div class="sidebar-section">
+    <p-button 
+      label="Nueva Cita" 
+      icon="pi pi-plus" 
+      styleClass="w-full premium-action-btn"
+      (onClick)="newAppointment.emit()"
+    />
+  </div>
+
+  <!-- Mini Calendar Navigation -->
+  <div class="sidebar-section">
+    <div class="mini-calendar">
+      <p-datepicker 
+        [inline]="true" 
+        [ngModel]="selectedDate()"
+        (ngModelChange)="onDateSelect($event)"
+      />
+    </div>
+  </div>
+
+  <!-- Stats Resumen -->
+  <div class="sidebar-section">
+    <div class="section-header">
+      <span class="section-title">Resumen del Día</span>
+      <div class="header-line"></div>
+    </div>
+    
+    <div class="stats-grid">
+      <div class="stat-card total" (click)="filterByStatus('total')">
+        <div class="stat-accent"></div>
+        <div class="stat-content">
+          <span class="stat-value">{{ totalAppointments() }}</span>
+          <span class="stat-label">Total Citas</span>
+        </div>
+      </div>
+
+      <div class="stat-card confirmed" (click)="filterByStatus('confirmed')">
+        <div class="stat-accent"></div>
+        <div class="stat-content">
+          <span class="stat-value">{{ confirmedCount() }}</span>
+          <span class="stat-label">Confirmadas</span>
+        </div>
+      </div>
+
+      <div class="stat-card pending" (click)="filterByStatus('pending')">
+        <div class="stat-accent"></div>
+        <div class="stat-content">
+          <span class="stat-value">{{ pendingCount() }}</span>
+          <span class="stat-label">Pendientes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Appointments List -->
+  <div class="sidebar-section flex-1">
+    <div class="section-header">
+      <span class="section-title">Próximas Citas</span>
+      <div class="header-line"></div>
+    </div>
+
+    <div class="appointments-list">
+      @for (apt of upcomingAppointments(); track apt.id) {
+        <div class="appointment-item" (click)="appointmentClick.emit(apt.id)">
+          <div class="apt-time">
+            {{ apt.start | date:'HH:mm' }}
+          </div>
+          <div class="apt-details">
+            <span class="apt-title">{{ apt.title }}</span>
+            <span class="apt-subtitle">{{ apt.extendedProps?.['employeeName'] }}</span>
+          </div>
+          <div 
+            class="apt-status-dot" 
+            [style.background-color]="apt.backgroundColor"
+          ></div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+           <i class="pi pi-calendar-minus"></i>
+           <span>No hay más citas hoy</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>
