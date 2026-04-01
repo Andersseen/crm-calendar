@@ -19,9 +19,9 @@ export class MockDataService implements CalendarDataProvider {
   ]);
 
   private readonly employeesList = signal<UiEmployee[]>([
-    { id: 'e1', name: 'Elena Estilista', position: 'Senior Stylist', color: '#10b981', isActive: true },
-    { id: 'e2', name: 'Marcos Manicura', position: 'Nail Artist', color: '#3b82f6', isActive: true },
-    { id: 'e3', name: 'Sara Spa', position: 'Therapist', color: '#8b5cf6', isActive: true },
+    { id: 'e1', name: 'Elena Estilista', position: 'Senior Stylist', color: '#059669', isActive: true },
+    { id: 'e2', name: 'Marcos Manicura', position: 'Nail Artist', color: '#2563eb', isActive: true },
+    { id: 'e3', name: 'Sara Spa', position: 'Therapist', color: '#7c3aed', isActive: true },
   ]);
 
   readonly servicesList = signal<UiService[]>([

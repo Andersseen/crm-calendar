@@ -70,14 +70,20 @@ import { CalendarStateService } from './calendar-state.service';
       display: flex;
       gap: 32px;
       height: 100%;
-      min-height: 700px;
-      padding-top: 8px;
+      padding-bottom: 24px;
+      overflow: hidden; /* Ensure no internal scroll for the layout itself */
     }
 
     .sidebar-col {
-      width: 300px;
-      min-width: 300px;
+      width: 320px;
+      min-width: 320px;
       flex-shrink: 0;
+      height: 100%;
+      overflow-y: auto;
+      
+      /* Hide scrollbar for cleaner look */
+      &::-webkit-scrollbar { display: none; }
+      scrollbar-width: none;
     }
 
     .calendar-col {
@@ -88,12 +94,10 @@ import { CalendarStateService } from './calendar-state.service';
       padding: 32px;
       border: 1px solid var(--slate-200);
       box-shadow: var(--premium-shadow);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:hover {
-        box-shadow: var(--premium-shadow-lg);
-        border-color: var(--slate-300);
-      }
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
     }
   `,
 })

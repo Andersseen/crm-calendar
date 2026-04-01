@@ -102,6 +102,8 @@ import { RouterModule } from '@angular/router';
       flex-direction: column;
       z-index: 20;
       box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .sidebar-brand {
@@ -159,7 +161,7 @@ import { RouterModule } from '@angular/router';
       align-items: center;
       gap: 12px;
       padding: 12px 16px;
-      color: var(--slate-400);
+      color: var(--slate-600);
       text-decoration: none;
       border-radius: 12px;
       font-weight: 600;
@@ -168,25 +170,27 @@ import { RouterModule } from '@angular/router';
 
       i {
         font-size: 1.1rem;
+        color: var(--slate-400);
         transition: transform 0.2s ease;
       }
 
       &:hover {
-        color: white;
-        background: rgba(255, 255, 255, 0.05);
+        color: var(--p-primary-color);
+        background: var(--p-surface-100);
         
         i {
           transform: translateX(2px);
+          color: var(--p-primary-color);
         }
       }
 
       &.active {
-        color: white;
-        background: rgba(16, 185, 129, 0.1);
-        box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.2);
+        color: var(--p-primary-700);
+        background: color-mix(in srgb, var(--p-primary-color) 8%, white);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--p-primary-color) 15%, transparent);
 
         i {
-          color: var(--emerald-500);
+          color: var(--p-primary-color);
         }
 
         &::after {
@@ -217,7 +221,7 @@ import { RouterModule } from '@angular/router';
 
     .sidebar-footer {
       padding: 24px;
-      border-top: 1px solid var(--slate-800);
+      border-top: 1px solid var(--p-surface-100);
     }
 
     .status-indicator {
@@ -225,9 +229,12 @@ import { RouterModule } from '@angular/router';
       align-items: center;
       gap: 10px;
       padding: 12px;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--p-surface-50);
+      border: 1px solid var(--p-surface-100);
       border-radius: 12px;
       font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--slate-600);
       letter-spacing: 0.2px;
     }
 
@@ -273,6 +280,7 @@ import { RouterModule } from '@angular/router';
     .main-content {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 40px;
       background: transparent;
     }

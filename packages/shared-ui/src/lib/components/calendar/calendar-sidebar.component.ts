@@ -46,13 +46,13 @@ export interface UpcomingAppointment {
       <div class="sidebar-section">
         <h3 class="section-title">Resumen del Día</h3>
         <div class="stats-grid">
-          <div class="stat-box primary">
+          <div class="stat-box total">
             <div class="stat-text-group">
               <span class="stat-value">{{ stats().total }}</span>
               <span class="stat-label">Total Citas</span>
             </div>
           </div>
-          <div class="stat-box info">
+          <div class="stat-box success">
             <div class="stat-text-group">
               <span class="stat-value">{{ stats().confirmed }}</span>
               <span class="stat-label">Confirmadas</span>
@@ -150,33 +150,43 @@ export interface UpcomingAppointment {
     }
 
     /* Mini Calendar */
-    .mini-calendar ::ng-deep .p-datepicker {
-      border: none;
-      padding: 0;
-      background: transparent;
-
-      .p-datepicker-header {
+    .mini-calendar {
+      overflow-x: hidden;
+      
+      ::ng-deep .p-datepicker {
+        border: none;
+        padding: 0;
         background: transparent;
-        border-bottom: 1px solid var(--p-surface-100);
-        padding-bottom: 12px;
-        margin-bottom: 8px;
-      }
+        width: 100% !important;
 
-      .p-datepicker-calendar td > span {
-        border-radius: 10px;
-        width: 32px;
-        height: 32px;
-        transition: all 0.2s;
-        
-        &.p-datepicker-today {
-          background: var(--p-surface-100);
-          color: var(--p-primary-color);
+        table {
+          width: 100% !important;
+          table-layout: fixed;
         }
-        
-        &.p-highlight {
-          background: var(--p-primary-color);
-          color: white;
-          box-shadow: 0 4px 10px color-mix(in srgb, var(--p-primary-color) 30%, transparent);
+
+        .p-datepicker-header {
+          background: transparent;
+          border-bottom: 1px solid var(--p-surface-100);
+          padding-bottom: 12px;
+          margin-bottom: 8px;
+        }
+
+        .p-datepicker-calendar td > span {
+          border-radius: 10px;
+          width: 30px; /* Reduced to fit better */
+          height: 30px;
+          transition: all 0.2s;
+          
+          &.p-datepicker-today {
+            background: var(--p-surface-100);
+            color: var(--p-primary-color);
+          }
+          
+          &.p-highlight {
+            background: var(--p-primary-color);
+            color: white;
+            box-shadow: 0 4px 10px color-mix(in srgb, var(--p-primary-color) 30%, transparent);
+          }
         }
       }
     }
@@ -204,16 +214,16 @@ export interface UpcomingAppointment {
         border-color: var(--p-surface-200);
       }
 
-      &.primary { 
-        background: color-mix(in srgb, var(--p-primary-color) 5%, var(--p-surface-0)); 
-        border-left: 5px solid var(--p-primary-color);
+      &.total { 
+        background: var(--p-surface-50); 
+        border-left: 5px solid var(--p-surface-400);
       }
-      &.info { 
-        background: color-mix(in srgb, var(--p-blue-500) 5%, var(--p-surface-0));
-        border-left: 5px solid var(--p-blue-500); 
+      &.success { 
+        background: color-mix(in srgb, var(--p-primary-color) 8%, var(--p-surface-0));
+        border-left: 5px solid var(--p-primary-color); 
       }
       &.warn { 
-        background: color-mix(in srgb, var(--p-amber-500) 5%, var(--p-surface-0));
+        background: color-mix(in srgb, var(--p-amber-500) 8%, var(--p-surface-0));
         border-left: 5px solid var(--p-amber-500); 
       }
     }
@@ -225,9 +235,9 @@ export interface UpcomingAppointment {
     }
 
     .stat-value {
-      font-size: 1.6rem;
+      font-size: 1.75rem;
       font-weight: 800;
-      color: var(--p-text-color);
+      color: var(--slate-800); /* Fixed contrast */
       line-height: 1;
       letter-spacing: -0.02em;
     }

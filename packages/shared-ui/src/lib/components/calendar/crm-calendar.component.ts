@@ -114,18 +114,23 @@ export interface CalendarEventMoveEvent {
         }
 
         .fc .fc-today-button {
-          background: var(--p-primary-color);
-          border: none;
-          color: white;
+          background: white;
+          border: 1px solid var(--p-surface-200);
+          color: var(--p-primary-color);
           border-radius: 10px !important;
           font-weight: 700;
           padding: 8px 18px;
-          box-shadow: 0 4px 12px color-mix(in srgb, var(--p-primary-color) 25%, transparent);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
           
           &:hover:not(:disabled) {
-            background: var(--p-primary-600);
+            background: var(--p-surface-50);
+            border-color: var(--p-primary-color);
             transform: translateY(-1px);
           }
+        }
+
+        .fc .fc-button-primary:disabled {
+          opacity: 0.4;
         }
 
         /* ─── Day Grid (Month View) ─── */
@@ -183,48 +188,51 @@ export interface CalendarEventMoveEvent {
         }
 
         /* ─── Events (all views) ─── */
-        .fc-event {
-          border-radius: 10px !important;
-          border-left-width: 5px !important;
-          border-top-width: 1px !important;
-          border-right-width: 1px !important;
-          border-bottom-width: 1px !important;
-          padding: 6px 8px;
-          font-size: 0.88rem;
+        .fc-v-event, .fc-h-event, .fc-event {
+          border-radius: 12px !important;
+          /* Re-injecting the border-left accent with high specificity */
+          border-left: 6px solid var(--fc-event-border-color) !important;
+          border-top: 1px solid color-mix(in srgb, var(--fc-event-border-color) 15%, transparent) !important;
+          border-right: 1px solid color-mix(in srgb, var(--fc-event-border-color) 15%, transparent) !important;
+          border-bottom: 1px solid color-mix(in srgb, var(--fc-event-border-color) 15%, transparent) !important;
+          padding: 8px 10px;
+          font-size: 0.85rem;
           cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-          transition: all 0.2s ease;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-          /* High visibility with premium feel */
-          background-color: color-mix(in srgb, var(--fc-event-bg-color) 24%, white) !important;
-          border-style: solid !important;
-          border-color: color-mix(in srgb, var(--fc-event-border-color) 15%, transparent) !important;
-          border-left-color: var(--fc-event-border-color) !important;
-          color: var(--p-surface-900) !important;
+          /* Refined Pastel Background & Dark Text for WCAG AA */
+          background-color: color-mix(in srgb, var(--fc-event-bg-color) 14%, #ffffff) !important;
+          
+          .fc-event-main-frame, .fc-event-main, .fc-event-title, .fc-event-time {
+            color: var(--p-surface-800) !important;
+          }
         }
 
         .fc-event:hover {
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-          transform: translateY(-1px) scale(1.01);
-          z-index: 5;
+          box-shadow: var(--premium-shadow-lg);
+          transform: translateY(-2px) scale(1.02);
+          background-color: color-mix(in srgb, var(--fc-event-bg-color) 20%, #ffffff) !important;
+          z-index: 10;
         }
 
         .fc-event .fc-event-main {
           padding: 0;
+          display: flex;
+          flex-direction: column;
         }
 
         .fc-event .fc-event-time {
           font-weight: 800;
-          font-size: 0.75rem;
-          color: var(--p-primary-700);
-          margin-bottom: 2px;
-          display: block;
+          font-size: 0.72rem;
+          color: var(--p-primary-600) !important;
+          margin-bottom: 0px;
         }
 
         .fc-event .fc-event-title {
           font-weight: 700;
-          line-height: 1.3;
-          color: var(--p-surface-900);
+          line-height: 1.2;
+          font-size: 0.85rem;
         }
 
         .fc .fc-timegrid-event {
@@ -239,18 +247,19 @@ export interface CalendarEventMoveEvent {
         }
 
         .fc .fc-col-header-cell-cushion {
-          font-weight: 700;
-          font-size: 0.9rem;
-          color: var(--p-text-secondary-color);
+          font-weight: 800;
+          font-size: 0.95rem;
+          color: var(--slate-800);
+          text-transform: capitalize;
           text-decoration: none !important;
         }
 
         /* ─── Borders & Containers ─── */
         .fc .fc-scrollgrid {
-          border-radius: 16px;
+          border-radius: 14px;
           border: 1px solid var(--p-surface-200);
           overflow: hidden;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+          background: white;
         }
 
         .fc td, .fc th {
@@ -263,8 +272,13 @@ export interface CalendarEventMoveEvent {
 
         .fc .fc-timegrid-slot-label-cushion {
           font-size: 0.8rem;
-          color: var(--p-text-secondary-color);
-          font-weight: 600;
+          color: var(--slate-500);
+          font-weight: 700;
+        }
+        
+        /* Disable all horizontal scrolls in FC */
+        .fc-scroller {
+          overflow-x: hidden !important;
         }
       }
     }
@@ -321,6 +335,7 @@ export class CrmCalendarComponent {
         dayMaxEvents: true,
         nowIndicator: this.nowIndicator(),
         eventMaxStack: 3,
+        eventTextColor: '#334155', // Slate-700 for high contrast on pastel
         height: '100%',
         expandRows: true,
         stickyHeaderDates: true,
