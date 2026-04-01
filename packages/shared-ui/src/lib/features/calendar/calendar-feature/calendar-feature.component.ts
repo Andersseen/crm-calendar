@@ -1,4 +1,4 @@
-import { Component, computed, signal, inject, OnInit, viewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, computed, signal, inject, OnInit, viewChild, TemplateRef, OnDestroy, AfterViewInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderService } from '../../../services/header.service';
 import {
@@ -43,6 +43,7 @@ export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewIni
   private headerService = inject(HeaderService);
 
   readonly headerActions = viewChild<TemplateRef<any>>('headerActions');
+  readonly calendar = viewChild<CrmCalendarComponent>('cal');
 
   // Local View State
   viewDate = signal(new Date());
@@ -53,6 +54,16 @@ export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewIni
 
   constructor() {
     this.state.loadInitialData();
+
+    // Refresh calendar size when sidebar toggles
+    effect(() => {
+      this.isSidebarVisible(); // Track dependency
+      const cal = this.calendar();
+      if (cal) {
+        // Wait for CSS transition (0.4s) to finish
+        setTimeout(() => cal.updateSize(), 450);
+      }
+    });
   }
 
   ngOnInit() {

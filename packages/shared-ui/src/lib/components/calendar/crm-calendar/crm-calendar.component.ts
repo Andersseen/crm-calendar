@@ -180,4 +180,12 @@ export class CrmCalendarComponent {
       api.changeView(view);
     }
   }
+
+  /** Refresh the calendar's internal size calculations */
+  updateSize(): void {
+    const api = this.calendarRef()?.getApi();
+    if (api) {
+      api.updateSize();
+    }
+  }
 }
