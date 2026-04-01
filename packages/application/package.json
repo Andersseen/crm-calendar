@@ -1,0 +1,25 @@
+{
+  "name": "@crm/application",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@crm/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@crm/typescript-config": "workspace:*",
+    "typescript": "~5.9.2",
+    "@types/bun": "latest"
+  }
+}

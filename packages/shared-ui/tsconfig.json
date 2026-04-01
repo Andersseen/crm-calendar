@@ -1,0 +1,13 @@
+{
+  "extends": "../../tooling/typescript-config/angular.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "paths": {
+      "@crm/domain": ["../domain/src/index.ts"],
+      "@crm/shared-utils": ["../shared-utils/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

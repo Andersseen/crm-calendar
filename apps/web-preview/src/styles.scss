@@ -1,0 +1,110 @@
+@use "primeicons/primeicons.css";
+
+/* Premium Design Tokens */
+:root {
+  /* Emerald & Slate Palette */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --slate-950: #020617;
+
+  --emerald-50: #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #047857;
+
+  --premium-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --premium-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --premium-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  
+  --premium-radius: 16px;
+  --premium-glass: rgba(255, 255, 255, 0.7);
+  --premium-border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Global Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: var(--slate-50);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(51, 65, 85, 0.05) 0px, transparent 50%);
+  color: var(--slate-800);
+  min-height: 100vh;
+}
+
+/* Premium Utilities */
+.glass-card {
+  background: var(--premium-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--premium-border);
+  border-radius: var(--premium-radius);
+  box-shadow: var(--premium-shadow);
+}
+
+.premium-shadow {
+  box-shadow: var(--premium-shadow-lg);
+}
+
+.text-muted {
+  color: var(--slate-500);
+}
+
+/* PrimeNG Overrides for Emerald & Slate */
+:root {
+  --p-primary-color: var(--emerald-600);
+  --p-primary-hover-color: var(--emerald-700);
+  --p-primary-contrast-color: #ffffff;
+  
+  --p-surface-0: #ffffff;
+  --p-surface-50: var(--slate-50);
+  --p-surface-100: var(--slate-100);
+  --p-surface-200: var(--slate-200);
+  --p-surface-300: var(--slate-300);
+  --p-surface-400: var(--slate-400);
+  --p-surface-500: var(--slate-500);
+  --p-surface-600: var(--slate-600);
+  --p-surface-700: var(--slate-700);
+  --p-surface-800: var(--slate-800);
+  --p-surface-900: var(--slate-900);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--slate-50);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 4px;
+  border: 2px solid var(--slate-50);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-400);
+}

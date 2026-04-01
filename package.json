@@ -1,0 +1,31 @@
+{
+  "name": "crm-calendar",
+  "private": false,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tooling/*"
+  ],
+  "packageManager": "bun@1.3.11",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "dev:desktop": "turbo run dev --filter=@crm/desktop-tauri",
+    "dev:web": "turbo run dev --filter=@crm/web-preview",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,scss,css,html}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,scss,css,html}\"",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "turbo": "^2.9.2",
+    "typescript": "~5.9.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

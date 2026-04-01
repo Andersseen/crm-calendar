@@ -1,0 +1,10 @@
+node_modules
+dist
+.angular
+.turbo
+coverage
+playwright-report
+bun.lock
+*.db
+src-tauri/target
+src-tauri/gen

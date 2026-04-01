@@ -1,0 +1,13 @@
+{
+  "name": "@crm/mobile-ionic",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Mobile CRM app — Phase 2 placeholder. Will share @crm/domain and @crm/application with desktop-tauri.",
+  "scripts": {
+    "dev": "echo '[mobile-ionic] Phase 2 — no dev server yet'"
+  },
+  "dependencies": {
+    "@crm/domain": "workspace:*",
+    "@crm/application": "workspace:*"
+  }
+}
