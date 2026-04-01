@@ -10,7 +10,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
       <nav class="sidebar">
         <div class="sidebar-brand">
           <i class="pi pi-calendar"></i>
-          <span>CRM Estética</span>
+          <span>CRM Calendar</span>
         </div>
         <ul class="sidebar-nav">
           <li>
@@ -47,5 +47,5 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'CRM Estética';
+  title = 'CRM Calendar';
 }

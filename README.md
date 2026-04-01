@@ -1,4 +1,4 @@
-# CRM Estética — Desktop-First Monorepo
+# CRM Calendar — Desktop-First Monorepo
 
 > CRM para gestión de citas de centro de estética. Desktop app con Tauri v2 + Angular, arquitectura DDD, monorepo Turborepo con Bun.
 
@@ -14,17 +14,17 @@ Angular App → HTTP (JSON-RPC 2.0) → Bun Sidecar (Hono)
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Runtime** | Bun 1.3+ |
-| **Monorepo** | Turborepo |
-| **Frontend** | Angular 21 (standalone, signals) |
-| **Desktop** | Tauri v2 |
-| **Backend** | Bun + Hono (sidecar) |
-| **Database** | Drizzle ORM + SQLite |
-| **UI** | PrimeNG 19 + Tailwind CSS v4 |
-| **Calendar** | FullCalendar 6 (free) |
-| **Testing** | Vitest (Angular) + Bun test (domain) + Playwright (e2e) |
+| Layer        | Technology                                              |
+| ------------ | ------------------------------------------------------- |
+| **Runtime**  | Bun 1.3+                                                |
+| **Monorepo** | Turborepo                                               |
+| **Frontend** | Angular 21 (standalone, signals)                        |
+| **Desktop**  | Tauri v2                                                |
+| **Backend**  | Bun + Hono (sidecar)                                    |
+| **Database** | Drizzle ORM + SQLite                                    |
+| **UI**       | PrimeNG 19 + Tailwind CSS v4                            |
+| **Calendar** | FullCalendar 6 (free)                                   |
+| **Testing**  | Vitest (Angular) + Bun test (domain) + Playwright (e2e) |
 
 ## Project Structure (DDD)
 
@@ -80,24 +80,28 @@ bun run format
 ## Development
 
 ### Start the sidecar independently
+
 ```bash
 cd packages/infrastructure
 bun run dev
 ```
 
 ### Start Angular dev server
+
 ```bash
 cd apps/desktop-tauri
 bun run dev
 ```
 
 ### Run domain tests
+
 ```bash
 cd packages/domain
 bun test
 ```
 
 ### Database migrations
+
 ```bash
 cd packages/infrastructure
 bun run db:generate   # Generate migration from schema changes
@@ -108,6 +112,7 @@ bun run db:studio     # Open Drizzle Studio
 ## Phase Roadmap
 
 ### Phase 1 (MVP — Desktop) ← Current
+
 - [x] Architecture setup (DDD + monorepo)
 - [ ] CRUD citas con FullCalendar
 - [ ] CRUD clientes
@@ -115,12 +120,14 @@ bun run db:studio     # Open Drizzle Studio
 - [ ] SQLite local + export/import JSON
 
 ### Phase 2 (Mobile + Notificaciones)
+
 - [ ] App Ionic con mismo domain/application
 - [ ] Sync manual desktop ↔ mobile
 - [ ] WhatsApp Twilio integration
 - [ ] Email templates
 
 ### Phase 3 (Scale)
+
 - [ ] Multi-tenant
 - [ ] Analytics dashboard
 - [ ] Online booking (web para clientes)

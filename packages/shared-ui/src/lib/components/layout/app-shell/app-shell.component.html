@@ -5,16 +5,12 @@
       <div class="brand-icon">
         <i class="pi pi-sparkles"></i>
       </div>
-      <span class="brand-name">CRM Estética</span>
+      <span class="brand-name">CRM Calendar</span>
     </div>
 
     <nav class="sidebar-nav">
       @for (item of navItems(); track item.label) {
-        <a 
-          class="nav-item" 
-          [routerLink]="item.routerLink"
-          routerLinkActive="active"
-        >
+        <a class="nav-item" [routerLink]="item.routerLink" routerLinkActive="active">
           <i [class]="'nav-icon ' + item.icon"></i>
           <span class="nav-label">{{ item.label }}</span>
         </a>
@@ -52,7 +48,7 @@
           <div class="header-actions">
             <!-- Legacy slot for static content -->
             <ng-content select="[header-actions]"></ng-content>
-            
+
             <!-- Dynamic actions from HeaderService -->
             @if (headerService.currentActions(); as template) {
               <ng-container [ngTemplateOutlet]="template" />
@@ -60,16 +56,23 @@
           </div>
           <div class="header-divider"></div>
           <!-- Theme Toggle -->
-          <button 
-            type="button" 
-            class="header-action-btn theme-toggle" 
+          <button
+            type="button"
+            class="header-action-btn theme-toggle"
             (click)="themeService.toggleTheme()"
-            [title]="themeService.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
+            [title]="
+              themeService.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'
+            "
           >
             <i [class]="themeService.theme() === 'light' ? 'pi pi-moon' : 'pi pi-sun'"></i>
           </button>
 
-          <button type="button" class="header-action-btn" (click)="onSync.emit()" title="Sincronizar">
+          <button
+            type="button"
+            class="header-action-btn"
+            (click)="onSync.emit()"
+            title="Sincronizar"
+          >
             <i class="pi pi-sync"></i>
             <span>Sincronizar</span>
           </button>
