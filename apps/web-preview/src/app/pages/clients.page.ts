@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -9,7 +9,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import {
-  AppShellComponent,
   ClientDialogComponent,
   CalendarStateService,
   UiClient,
@@ -22,7 +21,6 @@ import { MockDataService } from '../services/mock-data.service';
   standalone: true,
   imports: [
     CommonModule,
-    AppShellComponent,
     ClientDialogComponent,
     TableModule,
     ButtonModule,
@@ -38,151 +36,149 @@ import { MockDataService } from '../services/mock-data.service';
     { provide: CALENDAR_DATA_PROVIDER, useExisting: MockDataService },
   ],
   template: `
-    <crm-app-shell>
-      <div class="page-header mt-[-10px]">
-        <div class="header-content">
-          <h1 class="text-3xl font-black tracking-tighter text-slate-900">Directorio de Clientes</h1>
-          <p class="text-slate-500 font-medium">Gestiona la base de datos de tus clientes y su historial de visitas.</p>
-        </div>
-        <p-button
-          label="Nuevo Cliente"
-          icon="pi pi-plus"
-          (onClick)="openNew()"
-          severity="primary"
-          [raised]="true"
-        />
+    <div class="page-header mt-[-10px]">
+      <div class="header-content">
+        <h1 class="page-title">Directorio de Clientes</h1>
+        <p class="page-subtitle">Gestiona la base de datos de tus clientes y su historial de visitas.</p>
       </div>
-
-      <div class="premium-stats-grid">
-        <div class="stat-card glass-card">
-          <div class="stat-icon bg-emerald-100 text-emerald-600">
-            <i class="pi pi-users text-xl"></i>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">Total Clientes</span>
-            <span class="stat-value">{{ state.clients().length }}</span>
-          </div>
-        </div>
-        
-        <div class="stat-card glass-card">
-          <div class="stat-icon bg-blue-100 text-blue-600">
-            <i class="pi pi-user-plus text-xl"></i>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">Nuevos (Mes)</span>
-            <span class="stat-value text-emerald-600">8</span>
-          </div>
-        </div>
-
-        <div class="stat-card glass-card">
-          <div class="stat-icon bg-amber-100 text-amber-600">
-            <i class="pi pi-star text-xl"></i>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">Clientes VIP</span>
-            <span class="stat-value">15</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="table-outer premium-shadow fade-in">
-        <p-table
-          [value]="state.clients()"
-          [rows]="10"
-          [paginator]="true"
-          responsiveLayout="stack"
-          breakpoint="960px"
-          [globalFilterFields]="['name', 'email', 'phone']"
-          #dt
-          styleClass="p-datatable-sm"
-        >
-          <ng-template #caption>
-            <div class="table-header-toolbar">
-              <div class="search-box">
-                <p-iconfield>
-                  <p-inputicon styleClass="pi pi-search" />
-                  <input
-                    pInputText
-                    type="text"
-                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                    placeholder="Buscar por nombre, tel o email..."
-                    class="w-full md:w-80"
-                  />
-                </p-iconfield>
-              </div>
-            </div>
-          </ng-template>
-
-          <ng-template #header>
-            <tr>
-              <th pSortableColumn="name">Cliente <p-sortIcon field="name" /></th>
-              <th>Contacto</th>
-              <th pSortableColumn="createdAt" style="width: 12rem">Desde <p-sortIcon field="createdAt" /></th>
-              <th style="width: 10rem" class="text-right">Acciones</th>
-            </tr>
-          </ng-template>
-
-          <ng-template #body let-client>
-            <tr class="hover:bg-slate-50 transition-colors">
-              <td>
-                <div class="flex align-items-center gap-3">
-                  <div class="client-avatar">
-                    {{ client.name.charAt(0) }}
-                  </div>
-                  <div class="font-bold text-slate-800">{{ client.name }}</div>
-                </div>
-              </td>
-              <td>
-                <div class="flex flex-column gap-1 text-sm">
-                  <div class="flex align-items-center gap-2 text-slate-600">
-                    <i class="pi pi-phone text-xs"></i>
-                    {{ client.phone }}
-                  </div>
-                  <div class="flex align-items-center gap-2 text-slate-500">
-                    <i class="pi pi-envelope text-xs"></i>
-                    {{ client.email }}
-                  </div>
-                </div>
-              </td>
-              <td>
-                <span class="text-slate-600 font-medium">
-                  {{ client.createdAt | date: 'MMM yyyy' }}
-                </span>
-              </td>
-              <td class="text-right">
-                <div class="action-buttons">
-                  <p-button
-                    icon="pi pi-id-card"
-                    label="Ver Perfil"
-                    [text]="true"
-                    severity="secondary"
-                    (onClick)="editClient(client)"
-                    class="text-xs"
-                  />
-                  <p-button
-                    icon="pi pi-trash"
-                    [text]="true"
-                    [rounded]="true"
-                    severity="danger"
-                    (onClick)="deleteClient(client)"
-                  />
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-
-      <crm-client-dialog
-        [visible]="dialogVisible"
-        [client]="selectedClient"
-        (visibleChange)="dialogVisible = $event"
-        (save)="onSave($event)"
-        (close)="selectedClient = null"
+      <p-button
+        label="Nuevo Cliente"
+        icon="pi pi-plus"
+        (onClick)="openNew()"
+        severity="primary"
+        [raised]="true"
       />
+    </div>
 
-      <p-confirmdialog />
-    </crm-app-shell>
+    <div class="premium-stats-grid">
+      <div class="stat-card glass-card">
+        <div class="stat-icon bg-emerald-500/10 text-emerald-500">
+          <i class="pi pi-users text-xl"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Total Clientes</span>
+          <span class="stat-value">{{ state.clients().length }}</span>
+        </div>
+      </div>
+      
+      <div class="stat-card glass-card">
+        <div class="stat-icon bg-blue-500/10 text-blue-500">
+          <i class="pi pi-user-plus text-xl"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Nuevos (Mes)</span>
+          <span class="stat-value text-emerald-500">8</span>
+        </div>
+      </div>
+
+      <div class="stat-card glass-card">
+        <div class="stat-icon bg-amber-500/10 text-amber-500">
+          <i class="pi pi-star text-xl"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Clientes VIP</span>
+          <span class="stat-value">15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-outer premium-shadow fade-in">
+      <p-table
+        [value]="state.clients()"
+        [rows]="10"
+        [paginator]="true"
+        responsiveLayout="stack"
+        breakpoint="960px"
+        [globalFilterFields]="['name', 'email', 'phone']"
+        #dt
+        styleClass="p-datatable-sm"
+      >
+        <ng-template #caption>
+          <div class="table-header-toolbar">
+            <div class="search-box">
+              <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input
+                  pInputText
+                  type="text"
+                  (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                  placeholder="Buscar por nombre, tel o email..."
+                  class="w-full md:w-80"
+                />
+              </p-iconfield>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #header>
+          <tr>
+            <th pSortableColumn="name">Cliente <p-sortIcon field="name" /></th>
+            <th>Contacto</th>
+            <th pSortableColumn="createdAt" style="width: 12rem">Desde <p-sortIcon field="createdAt" /></th>
+            <th style="width: 10rem" class="text-right">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-client>
+          <tr class="hover-row transition-colors">
+            <td>
+              <div class="flex align-items-center gap-3">
+                <div class="client-avatar">
+                  {{ client.name.charAt(0) }}
+                </div>
+                <div class="font-bold text-primary">{{ client.name }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="flex flex-column gap-1 text-sm">
+                <div class="flex align-items-center gap-2 text-primary">
+                  <i class="pi pi-phone text-xs"></i>
+                  {{ client.phone }}
+                </div>
+                <div class="flex align-items-center gap-2 text-secondary">
+                  <i class="pi pi-envelope text-xs"></i>
+                  {{ client.email }}
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="text-secondary font-medium">
+                {{ client.createdAt | date: 'MMM yyyy' }}
+              </span>
+            </td>
+            <td class="text-right">
+              <div class="action-buttons">
+                <p-button
+                  icon="pi pi-id-card"
+                  label="Ver Perfil"
+                  [text]="true"
+                  severity="secondary"
+                  (onClick)="editClient(client)"
+                  class="text-xs"
+                />
+                <p-button
+                  icon="pi pi-trash"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="danger"
+                  (onClick)="deleteClient(client)"
+                />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <crm-client-dialog
+      [visible]="dialogVisible"
+      [client]="selectedClient"
+      (visibleChange)="dialogVisible = $event"
+      (save)="onSave($event)"
+      (close)="selectedClient = null"
+    />
+
+    <p-confirmdialog />
   `,
   styles: `
     .page-header {
@@ -190,6 +186,20 @@ import { MockDataService } from '../services/mock-data.service';
       justify-content: space-between;
       align-items: flex-end;
       margin-bottom: 32px;
+    }
+
+    .page-title {
+      font-size: 1.875rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: var(--color-text-primary);
+      margin: 0;
+    }
+
+    .page-subtitle {
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      margin: 4px 0 0 0;
     }
 
     .premium-stats-grid {
@@ -223,41 +233,44 @@ import { MockDataService } from '../services/mock-data.service';
     .stat-label {
       font-size: 0.875rem;
       font-weight: 600;
-      color: var(--slate-500);
+      color: var(--color-text-secondary);
     }
 
     .stat-value {
       font-size: 1.75rem;
       font-weight: 800;
-      color: var(--slate-900);
+      color: var(--color-text-primary);
       line-height: 1.2;
     }
 
     .table-outer {
-      background: white;
+      background: var(--color-surface);
       border-radius: 20px;
-      border: 1px solid var(--slate-200);
+      border: 1px solid var(--color-border);
       overflow: hidden;
     }
 
     .table-header-toolbar {
       padding: 20px 24px;
-      background: var(--slate-50);
-      border-bottom: 1px solid var(--slate-200);
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
     }
 
     .client-avatar {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: var(--emerald-100);
-      color: var(--emerald-700);
+      background: var(--emerald-500/10);
+      color: var(--emerald-500);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
       font-size: 0.9rem;
     }
+
+    .text-primary { color: var(--color-text-primary); }
+    .text-secondary { color: var(--color-text-secondary); }
 
     .action-buttons {
       display: flex;
@@ -267,6 +280,10 @@ import { MockDataService } from '../services/mock-data.service';
     }
 
     ::ng-deep {
+      .dark .table-outer {
+         box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+      }
+
       .p-datatable-header {
         padding: 0 !important;
         border: none !important;
@@ -274,25 +291,40 @@ import { MockDataService } from '../services/mock-data.service';
       }
 
       .p-datatable-thead > tr > th {
-        background: var(--slate-50) !important;
-        color: var(--slate-600) !important;
+        background: var(--color-bg-secondary) !important;
+        color: var(--color-text-secondary) !important;
         font-weight: 700 !important;
         font-size: 0.85rem !important;
         text-transform: uppercase !important;
         letter-spacing: 0.05em !important;
         padding: 16px 24px !important;
-        border-bottom: 1px solid var(--slate-200) !important;
+        border-bottom: 1px solid var(--color-border) !important;
       }
 
       .p-datatable-tbody > tr > td {
         padding: 16px 24px !important;
-        border-bottom: 1px solid var(--slate-100) !important;
+        border-bottom: 1px solid var(--color-border) !important;
+        background: var(--color-surface) !important;
+        color: var(--color-text-primary) !important;
+      }
+
+      .p-datatable-tbody > tr.hover-row:hover > td {
+         background: var(--color-bg-secondary) !important;
       }
 
       .p-paginator {
-        background: var(--slate-50) !important;
-        border-top: 1px solid var(--slate-200) !important;
+        background: var(--color-bg-secondary) !important;
+        border-top: 1px solid var(--color-border) !important;
         padding: 12px !important;
+        color: var(--color-text-secondary) !important;
+      }
+
+      .p-paginator .p-paginator-page, 
+      .p-paginator .p-paginator-next, 
+      .p-paginator .p-paginator-last, 
+      .p-paginator .p-paginator-first, 
+      .p-paginator .p-paginator-prev {
+         color: var(--color-text-primary) !important;
       }
     }
 

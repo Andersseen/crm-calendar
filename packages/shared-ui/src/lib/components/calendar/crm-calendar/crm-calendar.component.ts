@@ -65,6 +65,7 @@ export class CrmCalendarComponent {
   weekends = input<boolean>(true);
   editable = input<boolean>(true);
   nowIndicator = input<boolean>(true);
+  currentDate = input<Date>();
 
   // === Outputs ===
   dateSelect = output<CalendarDateSelectEvent>();
@@ -153,6 +154,14 @@ export class CrmCalendarComponent {
         },
       };
       this.calendarOptions.set(opts);
+    });
+
+    // Reactive date sync
+    effect(() => {
+      const date = this.currentDate();
+      if (date) {
+        this.goToDate(date);
+      }
     });
   }
 

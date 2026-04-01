@@ -16,6 +16,7 @@
   <div class="calendar-col">
     <crm-calendar
       #cal
+      [currentDate]="viewDate()"
       [events]="state.calendarEvents()"
       initialView="timeGridWeek"
       (dateSelect)="onSlotSelected($event)"
