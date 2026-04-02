@@ -5,7 +5,9 @@
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   overflow: hidden;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Sidebar */
@@ -20,8 +22,10 @@
   box-shadow: var(--shadow-sm);
   overflow-y: auto;
   overflow-x: hidden;
-  
-  &::-webkit-scrollbar { display: none; }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   scrollbar-width: none;
 }
 
@@ -74,7 +78,7 @@
     &.active {
       background: var(--color-primary-soft);
       color: var(--color-primary);
-      
+
       .nav-icon {
         color: var(--color-primary);
       }
@@ -109,7 +113,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    
+
     .status-dot {
       width: 8px;
       height: 8px;
@@ -223,7 +227,7 @@
     height: 38px;
     justify-content: center;
     font-size: 1.1rem;
-    
+
     i {
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -235,12 +239,13 @@
 }
 
 .main-content {
+  width: 100%;
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 40px;
+  padding: 0.5rem 1rem;
   background: transparent;
-  
+
   &::-webkit-scrollbar {
     width: 8px;
   }

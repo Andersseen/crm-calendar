@@ -79,7 +79,12 @@
     /* ─── Time Grid ─── */
     .fc .fc-timegrid-slot {
       height: 3.5rem;
+      border-color: var(--color-border);
+    }
+
+    .fc .fc-timegrid-slot-minor {
       border-color: var(--color-border-soft);
+      border-bottom-style: dashed;
     }
 
     .fc .fc-timegrid-slot-lane:hover {
@@ -98,24 +103,23 @@
     /* ─── Events ─── */
     .fc-v-event, .fc-h-event, .fc-event {
       border-radius: 12px !important;
-      border-left: 6px solid var(--fc-event-border-color) !important;
+      border-left-width: 8px !important;
+      border-left-style: solid !important;
       padding: 8px 10px;
       font-size: 0.85rem;
       cursor: pointer;
       box-shadow: var(--shadow-sm);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-
-      /* Pastel background using the event color but muted */
-      background-color: color-mix(in srgb, var(--fc-event-bg-color) 15%, var(--color-surface)) !important;
+      /* Let FullCalendar apply its own background/border colors inline */
       
-      .fc-event-main-frame, .fc-event-main, .fc-event-title, .fc-event-time {
+      .fc-event-main-frame, .fc-event-main, .fc-event-title {
         color: var(--color-text-primary) !important;
       }
 
       &:hover {
         box-shadow: var(--shadow-md);
         transform: translateY(-2px) scale(1.02);
-        background-color: color-mix(in srgb, var(--fc-event-bg-color) 25%, var(--color-surface)) !important;
+        filter: brightness(1.15);
         z-index: 10;
       }
     }
@@ -123,8 +127,9 @@
     .fc-event .fc-event-time {
       font-weight: 800;
       font-size: 0.72rem;
-      color: var(--color-primary) !important;
+      color: var(--color-text-primary) !important;
       margin-bottom: 0px;
+      opacity: 0.9;
     }
 
     .fc-event .fc-event-title {
@@ -141,7 +146,7 @@
     }
 
     .fc td, .fc th {
-      border-color: var(--color-border-soft);
+      border-color: var(--color-border);
     }
 
     .fc .fc-col-header-cell {

@@ -13,16 +13,20 @@ export const routes: Routes = [
       },
       {
         path: 'calendar',
-        loadComponent: () => import('./pages/calendar-demo.page').then(m => m.default),
+        loadComponent: () => import('./pages/calendar-demo.page'),
       },
       {
         path: 'employees',
-        loadComponent: () => import('./pages/employees.page').then(m => m.default),
+        loadComponent: () => import('./pages/employees.page'),
       },
       {
         path: 'clients',
-        loadComponent: () => import('./pages/clients.page').then(m => m.default),
+        loadComponent: () => import('./pages/clients.page'),
       },
-    ]
-  }
+      {
+        path: 'settings',
+        loadComponent: () => import('./pages/settings.page'),
+      },
+    ],
+  },
 ];

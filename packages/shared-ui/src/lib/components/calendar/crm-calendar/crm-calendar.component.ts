@@ -72,7 +72,7 @@ export class CrmCalendarComponent {
   eventClick = output<CalendarEventClickEvent>();
   eventDrop = output<CalendarEventMoveEvent>();
   eventResize = output<CalendarEventMoveEvent>();
-  viewChange = output<string>();
+  viewChange = output<'dayGridMonth' | 'timeGridWeek' | 'timeGridDay'>();
 
   // === Internal ===
   calendarRef = viewChild<FullCalendarComponent>('calendar');
@@ -150,7 +150,7 @@ export class CrmCalendarComponent {
           });
         },
         viewDidMount: (arg) => {
-          this.viewChange.emit(arg.view.type);
+          this.viewChange.emit(arg.view.type as 'dayGridMonth' | 'timeGridWeek' | 'timeGridDay');
         },
       };
       this.calendarOptions.set(opts);
