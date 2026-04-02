@@ -9,13 +9,12 @@ import { NavItem } from '../../../models/nav-item.model';
 
 @Component({
   selector: 'crm-app-shell',
-  standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
-    CrmHeaderComponent, 
-    CrmSidebarComponent, 
-    CrmAuxPanelComponent
+    CommonModule,
+    RouterModule,
+    CrmHeaderComponent,
+    CrmSidebarComponent,
+    CrmAuxPanelComponent,
   ],
   templateUrl: './app-shell.component.html',
   styleUrls: ['./app-shell.component.scss'],

@@ -11,6 +11,8 @@ export * from './lib/components/client/client-dialog/client-dialog.component';
 export * from './lib/features/calendar/calendar.provider';
 export * from './lib/features/calendar/calendar-feature/calendar-feature.component';
 export * from './lib/features/calendar/calendar-state.service';
+export * from './lib/features/clients/clients-feature/clients-feature.component';
+export * from './lib/features/employees/employees-feature/employees-feature.component';
 
 // Layout Components
 export * from './lib/components/layout/app-shell/app-shell.component';
