@@ -29,7 +29,6 @@ export class MainLayoutComponent {
     { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendar' },
     { label: 'Clientes', icon: 'pi pi-users', routerLink: '/clients' },
     { label: 'Empleados', icon: 'pi pi-id-card', routerLink: '/employees' },
-    { label: 'Configuración', icon: 'pi pi-cog', routerLink: '/settings' },
   ];
 
   // Derive page title from current URL

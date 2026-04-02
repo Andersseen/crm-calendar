@@ -115,9 +115,17 @@ class ExtendedCalendarStateService extends CalendarStateService {
         </div>
       </ng-template>
 
-      <div class="calendar-container" [class.sidebar-open]="isSidebarVisible()">
+      <div class="calendar-container" [class.sidebar-hidden]="!isSidebarVisible()">
         <!-- Calendar -->
         <div class="calendar-main">
+          <button
+            class="sidebar-toggle-btn"
+            (click)="toggleSidebar()"
+            [title]="isSidebarVisible() ? 'Colapsar Panel' : 'Expandir Panel'"
+          >
+            <i [class]="isSidebarVisible() ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"></i>
+          </button>
+
           <crm-calendar
             #cal
             [events]="state.calendarEvents()"
@@ -132,33 +140,19 @@ class ExtendedCalendarStateService extends CalendarStateService {
         </div>
 
         <!-- Sidebar -->
-        @if (isSidebarVisible()) {
-          <div class="calendar-sidebar-wrapper">
-            <crm-calendar-sidebar
-              [selectedDate]="viewDate()"
-              [totalAppointments]="dailyStats().total"
-              [confirmedCount]="dailyStats().confirmed"
-              [pendingCount]="dailyStats().pending"
-              [upcomingAppointments]="upcomingList()"
-              (dateChange)="onSidebarDateChange($event)"
-              (appointmentClick)="onSidebarAppointmentClick($event)"
-              (statusFilterChange)="onFilterChange($event)"
-            />
-          </div>
-        }
+        <div class="calendar-sidebar-wrapper">
+          <crm-calendar-sidebar
+            [selectedDate]="viewDate()"
+            [totalAppointments]="dailyStats().total"
+            [confirmedCount]="dailyStats().confirmed"
+            [pendingCount]="dailyStats().pending"
+            [upcomingAppointments]="upcomingList()"
+            (dateChange)="onSidebarDateChange($event)"
+            (appointmentClick)="onSidebarAppointmentClick($event)"
+            (statusFilterChange)="onFilterChange($event)"
+          />
+        </div>
       </div>
-
-      <!-- Toggle Sidebar Button (when closed) -->
-      @if (!isSidebarVisible()) {
-        <button
-          class="sidebar-toggle"
-          (click)="toggleSidebar()"
-          pTooltip="Mostrar panel lateral"
-          tooltipPosition="right"
-        >
-          <i class="pi pi-chevron-left"></i>
-        </button>
-      }
 
       <!-- Extended Appointment Dialog -->
       <crm-appointment-dialog-extended
@@ -206,40 +200,82 @@ class ExtendedCalendarStateService extends CalendarStateService {
       display: flex;
       flex: 1;
       overflow: hidden;
-      transition: all 0.4s ease;
+      transition: gap 0.4s ease;
+      gap: 16px;
     }
 
     .calendar-main {
       flex: 1;
       overflow: hidden;
+      position: relative;
+      background: var(--color-surface);
+      border-radius: 24px;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
 
     .calendar-sidebar-wrapper {
       width: 300px;
+      min-width: 300px;
       flex-shrink: 0;
+      height: 100%;
+      overflow-y: auto;
       border-left: 1px solid var(--surface-200);
       background-color: var(--surface-50);
+      transition: all 0.4s ease;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      scrollbar-width: none;
     }
 
-    .sidebar-toggle {
-      position: fixed;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 48px;
-      background-color: var(--surface-200);
+    .calendar-container.sidebar-hidden .calendar-sidebar-wrapper {
+      width: 0;
+      min-width: 0;
+      opacity: 0;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
       border: none;
-      border-radius: 4px 0 0 4px;
+    }
+
+    .sidebar-toggle-btn {
+      position: absolute;
+      right: -22px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.9);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: white;
+      border: 4px solid var(--color-surface);
       cursor: pointer;
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s ease;
+      opacity: 0.8;
     }
 
-    .sidebar-toggle:hover {
-      background-color: var(--surface-300);
+    .sidebar-toggle-btn:hover {
+      transform: translateY(-50%) scale(1.1);
+      background: var(--color-primary-soft);
+      box-shadow: var(--shadow-xl);
+      opacity: 1;
+    }
+
+    .calendar-container.sidebar-hidden .sidebar-toggle-btn {
+      right: 24px;
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+      border-color: white;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
