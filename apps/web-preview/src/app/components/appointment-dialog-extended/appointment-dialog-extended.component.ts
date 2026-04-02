@@ -5,9 +5,9 @@ import {
   EventEmitter,
   signal,
   computed,
-  effect,
+  OnChanges,
+  SimpleChanges,
   ChangeDetectionStrategy,
-  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,9 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
-import { GoogleCalendarAdapterService } from '../../services/google-calendar-adapter.service';
 
 export interface AppointmentFormData {
   id?: string;
@@ -34,10 +32,7 @@ export interface AppointmentFormData {
   status?: string;
 }
 
-export interface ExtendedAppointmentFormData extends AppointmentFormData {
-  sendCalendarInvite?: boolean;
-  clientEmail?: string;
-}
+export interface ExtendedAppointmentFormData extends AppointmentFormData {}
 
 export interface ClientOption {
   id: string;
@@ -71,8 +66,6 @@ export interface ServiceOption {
     ButtonModule,
     TagModule,
     SelectModule,
-    InputTextModule,
-    CheckboxModule,
     TooltipModule,
   ],
   template: `
@@ -101,25 +94,6 @@ export interface ServiceOption {
             (onChange)="onClientChange()"
           ></p-dropdown>
         </div>
-
-        <!-- Client Email (shown when client selected) -->
-        @if (selectedClient()?.email || isEditing() === false) {
-          <div class="field">
-            <label for="clientEmail">Email del cliente</label>
-            <input
-              id="clientEmail"
-              type="email"
-              pInputText
-              [(ngModel)]="form.clientEmail"
-              placeholder="cliente@ejemplo.com"
-              class="w-full"
-              [disabled]="!!selectedClient()?.email"
-            />
-            @if (selectedClient()?.email) {
-              <small class="text-secondary">Email del cliente registrado</small>
-            }
-          </div>
-        }
 
         <!-- Service Selection -->
         <div class="field">
@@ -152,13 +126,24 @@ export interface ServiceOption {
 
         <!-- Date & Time -->
         <div class="field">
-          <label>Fecha y hora *</label>
+          <label>Fecha y hora inicio *</label>
           <p-datePicker
             [(ngModel)]="form.startTime"
             [showTime]="true"
             [hourFormat]="'24'"
             styleClass="w-full"
             (onSelect)="onStartTimeChange()"
+          ></p-datePicker>
+        </div>
+
+        <div class="field">
+          <label>Fecha y hora fin *</label>
+          <p-datePicker
+            [(ngModel)]="form.endTime"
+            [showTime]="true"
+            [hourFormat]="'24'"
+            styleClass="w-full"
+            (onSelect)="onEndTimeChange()"
           ></p-datePicker>
         </div>
 
@@ -191,42 +176,6 @@ export interface ServiceOption {
               [value]="getStatusLabel(form.status)"
               [severity]="getStatusSeverity(form.status)"
             ></p-tag>
-          </div>
-        }
-
-        <!-- Google Calendar Sync Option -->
-        @if (showGoogleCalendarOption) {
-          <div class="field calendar-sync-field">
-            <div class="calendar-sync-option">
-              <p-checkbox
-                [(ngModel)]="form.sendCalendarInvite"
-                [binary]="true"
-                inputId="sendCalendarInvite"
-              ></p-checkbox>
-              <label for="sendCalendarInvite" class="calendar-label">
-                <i class="pi pi-calendar"></i>
-                <span>Enviar invitación a Google Calendar</span>
-                @if (isConnected()) {
-                  <i
-                    class="pi pi-check-circle connected-icon"
-                    pTooltip="Conectado a Google Calendar"
-                    tooltipPosition="top"
-                  ></i>
-                }
-              </label>
-            </div>
-            @if (form.sendCalendarInvite && !isConnected()) {
-              <small class="warning-text">
-                <i class="pi pi-exclamation-circle"></i>
-                Debes conectar Google Calendar primero en la configuración
-              </small>
-            }
-            @if (form.sendCalendarInvite && isConnected() && !form.clientEmail) {
-              <small class="warning-text">
-                <i class="pi pi-exclamation-circle"></i>
-                Añade el email del cliente para enviar la invitación
-              </small>
-            }
           </div>
         }
       </div>
@@ -348,15 +297,12 @@ export interface ServiceOption {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppointmentDialogExtendedComponent {
-  private readonly googleCalendar = inject(GoogleCalendarAdapterService);
-
+export class AppointmentDialogExtendedComponent implements OnChanges {
   @Input() visible = false;
   @Input() clients: ClientOption[] = [];
   @Input() employees: EmployeeOption[] = [];
   @Input() services: ServiceOption[] = [];
   @Input() appointment: ExtendedAppointmentFormData | null = null;
-  @Input() showGoogleCalendarOption = true;
 
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() save = new EventEmitter<ExtendedAppointmentFormData>();
@@ -369,17 +315,9 @@ export class AppointmentDialogExtendedComponent {
     startTime: new Date(),
     endTime: new Date(),
     notes: '',
-    sendCalendarInvite: false,
-    clientEmail: '',
   };
 
   isFormValid = signal(false);
-
-  readonly isConnected = computed(() => this.googleCalendar.isConnected());
-
-  readonly selectedClient = computed(() => {
-    return this.clients.find((c) => c.id === this.form.clientId) || null;
-  });
 
   readonly selectedService = computed(() => {
     return this.services.find((s) => s.id === this.form.serviceId);
@@ -399,7 +337,7 @@ export class AppointmentDialogExtendedComponent {
   });
 
   readonly timeSummary = computed(() => {
-    if (!this.form.startTime) return '';
+    if (!this.form.startTime || !this.form.endTime) return '';
     const start = this.form.startTime;
     const end = this.form.endTime;
     const fmt = (d: Date) =>
@@ -413,22 +351,16 @@ export class AppointmentDialogExtendedComponent {
     return `${fmt(start)} → ${end.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
   });
 
-  constructor() {
-    // Populate form when appointment input changes
-    effect(() => {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['appointment']) {
       const appt = this.appointment;
       if (appt) {
         this.form = { ...appt };
-        // Pre-populate client email if available
-        const client = this.clients.find((c) => c.id === appt.clientId);
-        if (client?.email && !this.form.clientEmail) {
-          this.form.clientEmail = client.email;
-        }
       } else {
         this.resetForm();
       }
       this.validateForm();
-    });
+    }
   }
 
   onVisibleChange(visible: boolean): void {
@@ -439,12 +371,6 @@ export class AppointmentDialogExtendedComponent {
   }
 
   onClientChange(): void {
-    const client = this.selectedClient();
-    if (client?.email) {
-      this.form.clientEmail = client.email;
-    } else {
-      this.form.clientEmail = '';
-    }
     this.validateForm();
   }
 
@@ -455,6 +381,10 @@ export class AppointmentDialogExtendedComponent {
 
   onStartTimeChange(): void {
     this.recalculateEndTime();
+    this.validateForm();
+  }
+
+  onEndTimeChange(): void {
     this.validateForm();
   }
 
@@ -506,7 +436,11 @@ export class AppointmentDialogExtendedComponent {
 
   private validateForm(): void {
     this.isFormValid.set(
-      !!this.form.clientId && !!this.form.serviceId && !!this.form.startTime && !!this.form.endTime,
+      !!this.form.clientId &&
+        !!this.form.serviceId &&
+        !!this.form.startTime &&
+        !!this.form.endTime &&
+        this.form.endTime > this.form.startTime,
     );
   }
 
@@ -517,8 +451,6 @@ export class AppointmentDialogExtendedComponent {
       startTime: new Date(),
       endTime: new Date(Date.now() + 30 * 60 * 1000),
       notes: '',
-      sendCalendarInvite: false,
-      clientEmail: '',
     };
   }
 }

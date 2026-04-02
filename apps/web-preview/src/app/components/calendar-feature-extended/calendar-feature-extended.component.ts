@@ -161,7 +161,6 @@ class ExtendedCalendarStateService extends CalendarStateService {
         [employees]="employeesForDialog()"
         [services]="servicesForDialog()"
         [appointment]="dialogData()"
-        [showGoogleCalendarOption]="true"
         (save)="onSaveAppointment($event)"
         (cancelAppointment)="onCancelAppointment($event)"
         (close)="onDialogClose()"
@@ -283,7 +282,6 @@ class ExtendedCalendarStateService extends CalendarStateService {
 export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly state = inject(ExtendedCalendarStateService);
   private headerService = inject(HeaderService);
-  private appointmentSync = inject(AppointmentSyncService);
   private googleCalendar = inject(GoogleCalendarAdapterService);
 
   readonly headerActions = viewChild<TemplateRef<unknown>>('headerActions');
@@ -409,8 +407,6 @@ export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, Afte
       startTime: selection.start,
       endTime: selection.end,
       notes: '',
-      sendCalendarInvite: false,
-      clientEmail: '',
     });
     this.dialogVisible.set(true);
   }
@@ -422,8 +418,6 @@ export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, Afte
     const appt = this.state.appointments().find((a) => a.id === id);
     if (!appt) return;
 
-    const client = this.state.clients().find((c) => c.id === appt.clientId);
-
     this.dialogData.set({
       id: appt.id,
       clientId: appt.clientId,
@@ -433,8 +427,6 @@ export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, Afte
       endTime: appt.endTime,
       notes: appt.notes,
       status: appt.status,
-      sendCalendarInvite: false,
-      clientEmail: client?.email || '',
     });
     this.dialogVisible.set(true);
   }
@@ -465,30 +457,17 @@ export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, Afte
   }
 
   async onSaveAppointment(data: ExtendedAppointmentFormData) {
-    const client = this.state.clients().find((c) => c.id === data.clientId);
-    const service = this.state.services().find((s) => s.id === data.serviceId);
-    const employee = this.state.employees().find((e) => e.id === data.employeeId);
-
     try {
-      await this.appointmentSync.saveAppointmentWithSync(
-        {
-          id: data.id,
-          clientId: data.clientId,
-          employeeId: data.employeeId,
-          serviceId: data.serviceId,
-          startTime: data.startTime,
-          endTime: data.endTime,
-          notes: data.notes,
-          status: data.status as UiAppointment['status'],
-        },
-        {
-          syncToGoogleCalendar: data.sendCalendarInvite ?? false,
-          clientEmail: data.clientEmail || client?.email,
-          clientName: client?.name,
-          serviceName: service?.name,
-          employeeName: employee?.name,
-        },
-      );
+      await this.state.saveAppointment({
+        id: data.id,
+        clientId: data.clientId,
+        employeeId: data.employeeId,
+        serviceId: data.serviceId,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        notes: data.notes,
+        status: data.status as UiAppointment['status'],
+      });
 
       await this.refreshAppointments();
       this.dialogVisible.set(false);
