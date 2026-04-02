@@ -1,0 +1,23 @@
+@if (auxPanelService.currentTemplate()) {
+  <aside 
+    class="aux-panel" 
+    [class.visible]="layoutService.auxPanelVisible()"
+    [class.expanded]="layoutService.auxPanelExpanded()"
+  >
+    <header class="panel-header">
+      <h3 class="panel-title">{{ auxPanelService.title() || 'Herramientas' }}</h3>
+      <button 
+        type="button" 
+        class="close-btn" 
+        (click)="layoutService.setAuxPanelVisible(false)"
+        title="Cerrar panel"
+      >
+        <i class="pi pi-times"></i>
+      </button>
+    </header>
+
+    <div class="panel-content">
+      <ng-container [ngTemplateOutlet]="auxPanelService.currentTemplate()"></ng-container>
+    </div>
+  </aside>
+}

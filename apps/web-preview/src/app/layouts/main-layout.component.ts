@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
-import { AppShellComponent, NavItem } from '@crm/shared-ui';
+import { AppShellComponent, FeatureService } from '@crm/shared-ui';
 import { filter, map, startWith } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -10,7 +10,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [CommonModule, RouterOutlet, AppShellComponent],
   template: `
-    <crm-app-shell [navItems]="navigationItems" [title]="pageTitle()" [subtitle]="pageSubtitle()">
+    <crm-app-shell [navItems]="featureService.navItems()" [title]="pageTitle()" [subtitle]="pageSubtitle()">
       <router-outlet />
     </crm-app-shell>
   `,
@@ -24,12 +24,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class MainLayoutComponent {
   private router = inject(Router);
-
-  navigationItems: NavItem[] = [
-    { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendar' },
-    { label: 'Clientes', icon: 'pi pi-users', routerLink: '/clients' },
-    { label: 'Empleados', icon: 'pi pi-id-card', routerLink: '/employees' },
-  ];
+  public featureService = inject(FeatureService);
 
   // Derive page title from current URL
   private currentUrl = toSignal(

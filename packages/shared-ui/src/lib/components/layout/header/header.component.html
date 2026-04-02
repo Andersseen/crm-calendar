@@ -1,0 +1,57 @@
+<header class="top-header">
+  <div class="header-content">
+    <div class="header-items-left">
+      <!-- Sidebar Toggle -->
+      <button
+        type="button"
+        class="sidebar-toggle-btn"
+        (click)="layoutService.toggleSidebar()"
+        [title]="layoutService.sidebarExpanded() ? 'Colapsar menú' : 'Expandir menú'"
+      >
+        <i
+          [class]="layoutService.sidebarExpanded() ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"
+        ></i>
+      </button>
+
+      <div class="header-divider mobile-hide"></div>
+
+      <div class="header-titles">
+        <h1 class="page-title">{{ title() }}</h1>
+        @if (subtitle()) {
+          <p class="page-subtitle">{{ subtitle() }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="header-actions">
+        <!-- Legacy slot for static content -->
+        <ng-content select="[header-actions]"></ng-content>
+
+        <!-- Dynamic actions from HeaderService -->
+        @if (headerService.currentActions(); as template) {
+          <ng-container [ngTemplateOutlet]="template" />
+        }
+      </div>
+
+      <div class="header-divider"></div>
+
+      <!-- Theme Toggle -->
+      <button
+        type="button"
+        class="header-action-btn theme-toggle"
+        (click)="themeService.toggleTheme()"
+        [title]="
+          themeService.theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'
+        "
+      >
+        <i [class]="themeService.theme() === 'light' ? 'pi pi-moon' : 'pi pi-sun'"></i>
+      </button>
+
+      <button type="button" class="header-action-btn sync-btn" title="Sincronizar">
+        <i class="pi pi-sync"></i>
+        <span class="mobile-hide">Sincronizar</span>
+      </button>
+    </div>
+  </div>
+</header>
