@@ -5,7 +5,6 @@ import { LayoutService } from '../../../services/layout.service';
 
 @Component({
   selector: 'crm-aux-panel',
-  standalone: true,
   imports: [CommonModule, NgTemplateOutlet],
   templateUrl: './aux-panel.component.html',
   styleUrls: ['./aux-panel.component.scss'],

@@ -1,4 +1,4 @@
-import { Component, inject, effect, viewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, inject, effect, viewChild, TemplateRef, OnDestroy, AfterViewInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -168,11 +168,11 @@ import { MockDataService } from '../services/mock-data.service';
     </div>
 
     <crm-client-dialog
-      [visible]="dialogVisible"
-      [client]="selectedClient"
-      (visibleChange)="dialogVisible = $event"
+      [visible]="dialogVisible()"
+      [client]="selectedClient()"
+      (visibleChange)="(dialogVisible.set($event))"
       (save)="onSave($event)"
-      (close)="selectedClient = null"
+      (close)="selectedClient.set(null)"
     />
 
     <p-confirmdialog />
@@ -321,8 +321,8 @@ export default class ClientsPage implements OnDestroy, AfterViewInit {
 
   readonly headerActions = viewChild<TemplateRef<any>>('headerActions');
 
-  dialogVisible = false;
-  selectedClient: UiClient | null = null;
+  dialogVisible = signal(false);
+  selectedClient = signal<UiClient | null>(null);
 
   constructor() {
     this.state.loadInitialData();
@@ -341,13 +341,13 @@ export default class ClientsPage implements OnDestroy, AfterViewInit {
   }
 
   openNew() {
-    this.selectedClient = null;
-    this.dialogVisible = true;
+    this.selectedClient.set(null);
+    this.dialogVisible.set(true);
   }
 
   editClient(client: UiClient) {
-    this.selectedClient = { ...client };
-    this.dialogVisible = true;
+    this.selectedClient.set({ ...client });
+    this.dialogVisible.set(true);
   }
 
   deleteClient(client: UiClient) {
@@ -367,6 +367,6 @@ export default class ClientsPage implements OnDestroy, AfterViewInit {
 
   onSave(client: UiClient) {
     this.state.saveClient(client);
-    this.dialogVisible = false;
+    this.dialogVisible.set(false);
   }
 }

@@ -34,6 +34,21 @@
         }
       </div>
 
+      @if (auxPanelService.currentTemplate()) {
+        <div class="header-divider"></div>
+        <!-- Aux Panel Toggle -->
+        <button
+          type="button"
+          class="header-action-btn aux-toggle"
+          [class.active]="layoutService.auxPanelVisible()"
+          (click)="layoutService.toggleAuxPanel()"
+          [title]="layoutService.auxPanelVisible() ? 'Cerrar herramientas' : 'Abrir herramientas'"
+        >
+          <i class="pi pi-objects-column"></i>
+          <span class="mobile-hide">Herramientas</span>
+        </button>
+      }
+
       <div class="header-divider"></div>
 
       <!-- Theme Toggle -->

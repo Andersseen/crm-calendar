@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../services/theme.service';
 import { HeaderService } from '../../../services/header.service';
 import { LayoutService } from '../../../services/layout.service';
+import { AuxPanelService } from '../../../services/aux-panel.service';
 
 @Component({
   selector: 'crm-header',
@@ -19,4 +20,5 @@ export class CrmHeaderComponent {
   public themeService = inject(ThemeService);
   public headerService = inject(HeaderService);
   public layoutService = inject(LayoutService);
+  public auxPanelService = inject(AuxPanelService);
 }

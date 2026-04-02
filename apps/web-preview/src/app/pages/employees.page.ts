@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal, effect, viewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, inject, effect, viewChild, TemplateRef, OnDestroy, AfterViewInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -164,11 +164,11 @@ import { MockDataService } from '../services/mock-data.service';
     </div>
 
     <crm-employee-dialog
-      [visible]="dialogVisible"
-      [employee]="selectedEmployee"
-      (visibleChange)="dialogVisible = $event"
+      [visible]="dialogVisible()"
+      [employee]="selectedEmployee()"
+      (visibleChange)="dialogVisible.set($event)"
       (save)="onSave($event)"
-      (close)="selectedEmployee = null"
+      (close)="selectedEmployee.set(null)"
     />
 
     <p-confirmdialog />
@@ -321,8 +321,8 @@ export default class EmployeesPage implements OnDestroy, AfterViewInit {
 
   readonly headerActions = viewChild<TemplateRef<any>>('headerActions');
 
-  dialogVisible = false;
-  selectedEmployee: UiEmployee | null = null;
+  dialogVisible = signal(false);
+  selectedEmployee = signal<UiEmployee | null>(null);
 
   activeCount = computed(() => this.state.employees().filter((e) => e.isActive).length);
 
@@ -343,13 +343,13 @@ export default class EmployeesPage implements OnDestroy, AfterViewInit {
   }
 
   openNew() {
-    this.selectedEmployee = null;
-    this.dialogVisible = true;
+    this.selectedEmployee.set(null);
+    this.dialogVisible.set(true);
   }
 
   editEmployee(employee: UiEmployee) {
-    this.selectedEmployee = { ...employee };
-    this.dialogVisible = true;
+    this.selectedEmployee.set({ ...employee });
+    this.dialogVisible.set(true);
   }
 
   async deleteEmployee(employee: UiEmployee) {
@@ -369,6 +369,6 @@ export default class EmployeesPage implements OnDestroy, AfterViewInit {
 
   onSave(employee: UiEmployee) {
     this.state.saveEmployee(employee);
-    this.dialogVisible = false;
+    this.dialogVisible.set(false);
   }
 }
