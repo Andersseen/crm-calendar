@@ -1,19 +1,12 @@
 import { Component } from '@angular/core';
-import {
-  CalendarFeatureComponent,
-  CALENDAR_DATA_PROVIDER,
-} from '@crm/shared-ui';
-import { MockDataService } from '../services/mock-data.service';
-import { ButtonModule } from 'primeng/button';
+import { CalendarFeatureExtendedComponent } from '../components/calendar-feature-extended/calendar-feature-extended.component';
 
 @Component({
   selector: 'crm-calendar-demo',
-  standalone: true,
-  imports: [CalendarFeatureComponent, ButtonModule],
-  providers: [{ provide: CALENDAR_DATA_PROVIDER, useExisting: MockDataService }],
+  imports: [CalendarFeatureExtendedComponent],
   template: `
     <div class="calendar-layout-wrapper">
-      <crm-calendar-feature />
+      <crm-calendar-feature-extended />
     </div>
   `,
   styles: `
