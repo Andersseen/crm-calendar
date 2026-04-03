@@ -12,15 +12,24 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderService } from '@crm/shared-ui';
-import {
+import { MockDataService } from '../../services/mock-data.service';
+import { AppointmentSyncService } from '../../services/appointment-sync.service';
+import { GoogleCalendarAdapterService } from '../../services/google-calendar-adapter.service';
+import { 
+  CalendarStateService, 
+  LayoutService, 
+  AuxPanelService,
+  HeaderService,
+  ThemeService,
+  CALENDAR_DATA_PROVIDER, 
+  UiAppointment,
   CrmCalendarComponent,
   CalendarDateSelectEvent,
   CalendarEventClickEvent,
   CalendarEventMoveEvent,
   CalendarEventInput,
-} from '@shared-ui/components/calendar/crm-calendar/crm-calendar.component';
-import { CalendarSidebarComponent } from '@shared-ui/components/calendar/calendar-sidebar/calendar-sidebar.component';
+  CalendarSidebarComponent
+} from '@crm/shared-ui';
 import {
   AppointmentDialogExtendedComponent,
   ExtendedAppointmentFormData,
@@ -28,12 +37,6 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
-import { MockDataService } from '../../services/mock-data.service';
-import { AppointmentSyncService } from '../../services/appointment-sync.service';
-import { GoogleCalendarAdapterService } from '../../services/google-calendar-adapter.service';
-import { CalendarStateService } from '@crm/shared-ui';
-import { CALENDAR_DATA_PROVIDER, UiAppointment } from '@crm/shared-ui';
-import { ThemeService } from '@shared-ui/services/theme.service';
 
 export interface DailyStats {
   total: number;
@@ -115,17 +118,9 @@ class ExtendedCalendarStateService extends CalendarStateService {
         </div>
       </ng-template>
 
-      <div class="calendar-container" [class.sidebar-hidden]="!isSidebarVisible()">
+      <div class="calendar-container">
         <!-- Calendar -->
         <div class="calendar-main">
-          <button
-            class="sidebar-toggle-btn"
-            (click)="toggleSidebar()"
-            [title]="isSidebarVisible() ? 'Colapsar Panel' : 'Expandir Panel'"
-          >
-            <i [class]="isSidebarVisible() ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"></i>
-          </button>
-
           <crm-calendar
             #cal
             [events]="state.calendarEvents()"
@@ -138,21 +133,21 @@ class ExtendedCalendarStateService extends CalendarStateService {
             (viewChange)="onViewChanged($event)"
           />
         </div>
-
-        <!-- Sidebar -->
-        <div class="calendar-sidebar-wrapper">
-          <crm-calendar-sidebar
-            [selectedDate]="viewDate()"
-            [totalAppointments]="dailyStats().total"
-            [confirmedCount]="dailyStats().confirmed"
-            [pendingCount]="dailyStats().pending"
-            [upcomingAppointments]="upcomingList()"
-            (dateChange)="onSidebarDateChange($event)"
-            (appointmentClick)="onSidebarAppointmentClick($event)"
-            (statusFilterChange)="onFilterChange($event)"
-          />
-        </div>
       </div>
+
+      <!-- Auxiliary Side Panel Content -->
+      <ng-template #auxPanelTemplate>
+        <crm-calendar-sidebar
+          [selectedDate]="viewDate()"
+          [totalAppointments]="dailyStats().total"
+          [confirmedCount]="dailyStats().confirmed"
+          [pendingCount]="dailyStats().pending"
+          [upcomingAppointments]="upcomingList()"
+          (dateChange)="onSidebarDateChange($event)"
+          (appointmentClick)="onSidebarAppointmentClick($event)"
+          (statusFilterChange)="onFilterChange($event)"
+        />
+      </ng-template>
 
       <!-- Extended Appointment Dialog -->
       <crm-appointment-dialog-extended
@@ -199,8 +194,6 @@ class ExtendedCalendarStateService extends CalendarStateService {
       display: flex;
       flex: 1;
       overflow: hidden;
-      transition: gap 0.4s ease;
-      gap: 16px;
     }
 
     .calendar-main {
@@ -208,83 +201,25 @@ class ExtendedCalendarStateService extends CalendarStateService {
       overflow: hidden;
       position: relative;
       background: var(--color-surface);
-      border-radius: 24px;
+      border-radius: 20px;
       border: 1px solid var(--color-border);
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
       height: 100%;
     }
-
-    .calendar-sidebar-wrapper {
-      width: 300px;
-      min-width: 300px;
-      flex-shrink: 0;
-      height: 100%;
-      overflow-y: auto;
-      border-left: 1px solid var(--surface-200);
-      background-color: var(--surface-50);
-      transition: all 0.4s ease;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      scrollbar-width: none;
-    }
-
-    .calendar-container.sidebar-hidden .calendar-sidebar-wrapper {
-      width: 0;
-      min-width: 0;
-      opacity: 0;
-      pointer-events: none;
-      margin: 0;
-      padding: 0;
-      border: none;
-    }
-
-    .sidebar-toggle-btn {
-      position: absolute;
-      right: -22px;
-      top: 50%;
-      transform: translateY(-50%) scale(0.9);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--color-primary);
-      color: white;
-      border: 4px solid var(--color-surface);
-      cursor: pointer;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-lg);
-      transition: all 0.3s ease;
-      opacity: 0.8;
-    }
-
-    .sidebar-toggle-btn:hover {
-      transform: translateY(-50%) scale(1.1);
-      background: var(--color-primary-soft);
-      box-shadow: var(--shadow-xl);
-      opacity: 1;
-    }
-
-    .calendar-container.sidebar-hidden .sidebar-toggle-btn {
-      right: 24px;
-      opacity: 1;
-      transform: translateY(-50%) scale(1);
-      border-color: white;
-    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly state = inject(ExtendedCalendarStateService);
+  protected readonly layoutService = inject(LayoutService);
   private headerService = inject(HeaderService);
+  private auxPanelService = inject(AuxPanelService);
   private googleCalendar = inject(GoogleCalendarAdapterService);
 
   readonly headerActions = viewChild<TemplateRef<unknown>>('headerActions');
+  readonly auxPanelTemplate = viewChild<TemplateRef<unknown>>('auxPanelTemplate');
   readonly calendar = viewChild<CrmCalendarComponent>('cal');
 
   // Local View State
@@ -292,16 +227,16 @@ export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, Afte
   currentView = signal<'dayGridMonth' | 'timeGridWeek' | 'timeGridDay'>('timeGridWeek');
   dialogVisible = signal(false);
   dialogData = signal<ExtendedAppointmentFormData | null>(null);
-  isSidebarVisible = signal(true);
 
   readonly isConnected = computed(() => this.googleCalendar.isConnected());
 
   constructor() {
     this.state.loadInitialData();
 
-    // Refresh calendar size when sidebar toggles
+    // Refresh calendar size when sidebar/aux-panel toggles
     effect(() => {
-      this.isSidebarVisible();
+      this.layoutService.auxPanelVisible();
+      this.layoutService.sidebarExpanded();
       const cal = this.calendar();
       if (cal) {
         setTimeout(() => cal.updateSize(), 450);
@@ -318,14 +253,22 @@ export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, Afte
   }
 
   ngAfterViewInit() {
-    const template = this.headerActions();
-    if (template) {
-      this.headerService.setActions(template);
+    // Set Header Actions
+    const hTemplate = this.headerActions();
+    if (hTemplate) {
+      this.headerService.setActions(hTemplate as TemplateRef<any>);
+    }
+
+    // Set Auxiliary Panel Content
+    const aTemplate = this.auxPanelTemplate();
+    if (aTemplate) {
+      this.auxPanelService.setPanel(aTemplate as TemplateRef<any>, 'Calendario');
     }
   }
 
   ngOnDestroy() {
-    this.headerService.clearActions(this.headerActions() || null);
+    this.headerService.clearActions((this.headerActions() as TemplateRef<any>) || null);
+    this.auxPanelService.clearPanel((this.auxPanelTemplate() as TemplateRef<any>) || undefined);
   }
 
   // Computed properties for dialog
@@ -479,10 +422,6 @@ export class CalendarFeatureExtendedComponent implements OnInit, OnDestroy, Afte
   async onCancelAppointment(id: string) {
     await this.state.cancelAppointment(id);
     this.dialogVisible.set(false);
-  }
-
-  toggleSidebar() {
-    this.isSidebarVisible.update((v) => !v);
   }
 
   goToSettings() {

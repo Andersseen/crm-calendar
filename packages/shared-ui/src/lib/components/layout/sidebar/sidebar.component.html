@@ -1,0 +1,38 @@
+<aside class="sidebar" [class.collapsed]="!layoutService.sidebarExpanded()">
+  <div class="sidebar-brand">
+    <div class="brand-icon">
+      <i class="pi pi-sparkles"></i>
+    </div>
+    <span class="brand-name">CRM Calendar</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    @for (item of navItems(); track item.label) {
+      <a
+        class="nav-item"
+        [routerLink]="item.routerLink"
+        routerLinkActive="active"
+        [title]="item.label"
+      >
+        <i [class]="'nav-icon ' + item.icon"></i>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-nav secondary">
+    <a class="nav-item settings" routerLink="/settings" routerLinkActive="active" title="Ajustes">
+      <i class="nav-icon pi pi-cog"></i>
+      <span class="nav-label">Ajustes</span>
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="status-indicator">
+      <div class="status-dot"></div>
+      <span class="status-text">Mock Mode</span>
+    </div>
+  </div>
+</aside>

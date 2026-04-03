@@ -1,0 +1,133 @@
+<ng-template #headerActions>
+  <p-button
+    label="Nuevo Empleado"
+    icon="pi pi-plus"
+    (onClick)="openNew()"
+    severity="primary"
+    [raised]="true"
+  />
+</ng-template>
+
+<div class="premium-stats-grid">
+  <div class="stat-card glass-card">
+    <div class="stat-icon bg-emerald-500/10 text-emerald-500">
+      <i class="pi pi-users text-xl"></i>
+    </div>
+    <div class="stat-info">
+      <span class="stat-label">Total Empleados</span>
+      <span class="stat-value">{{ state.employees().length }}</span>
+    </div>
+  </div>
+  
+  <div class="stat-card glass-card">
+    <div class="stat-icon bg-blue-500/10 text-blue-500">
+      <i class="pi pi-check-circle text-xl"></i>
+    </div>
+    <div class="stat-info">
+      <span class="stat-label">Personal Activo</span>
+      <span class="stat-value text-emerald-500">{{ activeCount() }}</span>
+    </div>
+  </div>
+
+  <div class="stat-card glass-card">
+    <div class="stat-icon bg-purple-500/10 text-purple-500">
+      <i class="pi pi-calendar text-xl"></i>
+    </div>
+    <div class="stat-info">
+      <span class="stat-label">Citas de Hoy</span>
+      <span class="stat-value">12</span>
+    </div>
+  </div>
+</div>
+
+<div class="table-outer premium-shadow fade-in">
+  <p-table
+    [value]="state.employees()"
+    [rows]="10"
+    [paginator]="true"
+    responsiveLayout="stack"
+    breakpoint="960px"
+    [globalFilterFields]="['name', 'position']"
+    #dt
+    styleClass="p-datatable-sm"
+  >
+    <ng-template #caption>
+      <div class="table-header-toolbar">
+        <div class="search-box">
+          <p-iconfield>
+            <p-inputicon styleClass="pi pi-search" />
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Buscar por nombre o cargo..."
+              class="w-full md:w-80"
+            />
+          </p-iconfield>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #header>
+      <tr>
+        <th style="width: 4rem" class="text-center"></th>
+        <th pSortableColumn="name">Nombre <p-sortIcon field="name" /></th>
+        <th pSortableColumn="position">Cargo <p-sortIcon field="position" /></th>
+        <th pSortableColumn="isActive" style="width: 10rem">Estado <p-sortIcon field="isActive" /></th>
+        <th style="width: 10rem" class="text-right">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-employee>
+      <tr class="hover-row transition-colors">
+        <td class="text-center">
+          <div class="employee-avatar" [style.background-color]="employee.color + '20'" [style.color]="employee.color">
+              {{ employee.name.charAt(0) }}
+          </div>
+        </td>
+        <td>
+          <div class="font-bold text-primary">{{ employee.name }}</div>
+        </td>
+        <td>
+          <span class="text-secondary">{{ employee.position }}</span>
+        </td>
+        <td>
+          <p-tag
+            [severity]="employee.isActive ? 'success' : 'secondary'"
+            [value]="employee.isActive ? 'Activo' : 'Inactivo'"
+            [rounded]="true"
+            class="premium-tag"
+          />
+        </td>
+        <td class="text-right">
+          <div class="action-buttons">
+            <p-button
+              icon="pi pi-pencil"
+              [text]="true"
+              [rounded]="true"
+              severity="secondary"
+              (onClick)="editEmployee(employee)"
+            />
+            <p-button
+              icon="pi pi-trash"
+              [text]="true"
+              [rounded]="true"
+              severity="danger"
+              (onClick)="deleteEmployee(employee)"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<crm-employee-dialog
+  [visible]="dialogVisible()"
+  [employee]="selectedEmployee()"
+  (visibleChange)="dialogVisible.set($event)"
+  (save)="onSave($event)"
+  (close)="selectedEmployee.set(null)"
+/>
+
+<p-confirmdialog />

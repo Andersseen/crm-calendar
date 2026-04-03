@@ -1,6 +1,8 @@
 import { Component, computed, signal, inject, OnInit, viewChild, TemplateRef, OnDestroy, AfterViewInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderService } from '../../../services/header.service';
+import { AuxPanelService } from '../../../services/aux-panel.service';
+import { LayoutService } from '../../../services/layout.service';
 import {
   CrmCalendarComponent,
   CalendarDateSelectEvent,
@@ -41,8 +43,11 @@ export interface DailyStats {
 export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly state = inject(CalendarStateService);
   private headerService = inject(HeaderService);
+  private auxPanelService = inject(AuxPanelService);
+  public layoutService = inject(LayoutService);
 
   readonly headerActions = viewChild<TemplateRef<any>>('headerActions');
+  readonly auxPanelTemplate = viewChild<TemplateRef<any>>('auxPanelTemplate');
   readonly calendar = viewChild<CrmCalendarComponent>('cal');
 
   // Local View State
@@ -50,17 +55,16 @@ export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewIni
   currentView = signal('timeGridWeek');
   dialogVisible = signal(false);
   dialogData = signal<AppointmentFormData | null>(null);
-  isSidebarVisible = signal(true);
 
   constructor() {
     this.state.loadInitialData();
 
-    // Refresh calendar size when sidebar toggles
+    // Refresh calendar size when aux panel or sidebar toggles
     effect(() => {
-      this.isSidebarVisible(); // Track dependency
+      this.layoutService.sidebarExpanded();
+      this.layoutService.auxPanelVisible();
       const cal = this.calendar();
       if (cal) {
-        // Wait for CSS transition (0.4s) to finish
         setTimeout(() => cal.updateSize(), 450);
       }
     });
@@ -71,15 +75,24 @@ export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngAfterViewInit() {
-    // Register actions when the view is ready
-    const template = this.headerActions();
-    if (template) {
-      this.headerService.setActions(template);
+    // Register header actions
+    const headerTemplate = this.headerActions();
+    if (headerTemplate) {
+      this.headerService.setActions(headerTemplate);
+    }
+
+    // Register aux panel tools
+    const auxTemplate = this.auxPanelTemplate();
+    if (auxTemplate) {
+      this.auxPanelService.setPanel(auxTemplate, 'Calendario');
+      this.layoutService.setAuxPanelVisible(true);
     }
   }
 
   ngOnDestroy() {
     this.headerService.clearActions(this.headerActions() || null);
+    this.auxPanelService.clearPanel(this.auxPanelTemplate() ?? undefined);
+    this.layoutService.setAuxPanelVisible(false);
   }
 
   dailyStats = computed<DailyStats>(() => {
@@ -195,7 +208,4 @@ export class CalendarFeatureComponent implements OnInit, OnDestroy, AfterViewIni
     this.dialogVisible.set(false);
   }
 
-  toggleSidebar() {
-    this.isSidebarVisible.update((v) => !v);
-  }
 }
