@@ -34,20 +34,7 @@
         }
       </div>
 
-      @if (auxPanelService.currentTemplate()) {
-        <div class="header-divider"></div>
-        <!-- Aux Panel Toggle -->
-        <button
-          type="button"
-          class="header-action-btn aux-toggle"
-          [class.active]="layoutService.auxPanelVisible()"
-          (click)="layoutService.toggleAuxPanel()"
-          [title]="layoutService.auxPanelVisible() ? 'Cerrar herramientas' : 'Abrir herramientas'"
-        >
-          <i class="pi pi-objects-column"></i>
-          <span class="mobile-hide">Herramientas</span>
-        </button>
-      }
+      <div class="header-divider"></div>
 
       <div class="header-divider"></div>
 
@@ -67,6 +54,23 @@
         <i class="pi pi-sync"></i>
         <span class="mobile-hide">Sincronizar</span>
       </button>
+
+      @if (auxPanelService.currentTemplate()) {
+        <div class="header-divider"></div>
+
+        <!-- Aux Panel Toggle (Symmetric to Sidebar) -->
+        <button
+          type="button"
+          class="sidebar-toggle-btn aux-toggle-btn"
+          [class.active]="layoutService.auxPanelVisible()"
+          (click)="layoutService.toggleAuxPanel()"
+          [title]="layoutService.auxPanelVisible() ? 'Cerrar panel' : 'Abrir panel'"
+        >
+          <i
+            [class]="layoutService.auxPanelVisible() ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"
+          ></i>
+        </button>
+      }
     </div>
   </div>
 </header>

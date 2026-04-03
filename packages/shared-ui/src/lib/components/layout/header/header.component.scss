@@ -130,7 +130,9 @@
     }
   }
 
-  &.aux-toggle {
+  &.aux-toggle-btn {
+    margin-left: 4px; /* Slight separation from sync/theme icons */
+
     &.active {
       background: var(--color-primary-soft);
       border-color: var(--color-primary);
